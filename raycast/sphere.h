@@ -1,29 +1,42 @@
-/**********************************************************************
- * Some stuff to handle spheres
- **********************************************************************/
-#include "vector.h"
+#ifndef SPHERE_H
+#define SPHERE_H
 
-typedef struct sphere {
-  int index;               // identifies a sphere; must be greater than 0
+#include "include/Angel.h"
+#include "math.h"
+
+typedef Angel::vec3 Point;
+typedef Angel::vec3 Color;
+
+class sphere
+{
+private:
+  int index;
 
   Point center;
   float radius;
 
-  float mat_ambient[3];    // material property used in Phong model
+  float mat_ambient[3];
   float mat_diffuse[3];
   float mat_specular[3];
   float mat_shineness;
 
-  float reflectance;       // this number [0,1] determines how much 
-                           // reflected light contributes to the color
-                           // of a pixel
-  struct sphere *next;
-} Spheres;   // a list of spheres
+  GLfloat reflectance;
 
-// intersect ray with sphere
-Spheres *intersect_scene(Point, Vector, Spheres *, Point *, int);
-// return the unit normal at a point on sphere
-Vector sphere_normal(Point, Spheres *);
-// add a sphere to the sphere list
-Spheres *add_sphere(Spheres *, Point, float, float [], float [], float [], float, float, int);
 
+private:
+  float intersect_sphere(Point origin, vec3 v, sphere sph, Point* hitPoint);
+
+public:
+  sphere();
+  sphere(vec3 ctr, float rad, float abm[], float dif[],
+     float spe[], float shine, float refl);
+  ~sphere();
+
+  vec3 getNormal(Point Point);
+  sphere* intersect_scene(Point origin, vec3 v, sphere* spheres, Point* hitPoint);
+  
+};
+
+
+
+#endif

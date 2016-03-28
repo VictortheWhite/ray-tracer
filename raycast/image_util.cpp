@@ -1,13 +1,16 @@
+#ifndef IMAGE_UTIL
+#define IMAGE_UTIL
+
 #include <stdio.h>
-#include <GL/glut.h>
 #include <string.h>
 #include "global.h"
+#include "include/Angel.h"
 
 // Global variables
 extern int win_width;
 extern int win_height;
 
-extern GLfloat frame[WIN_HEIGHT][WIN_WIDTH][3]; 
+extern vec3 frame[WIN_HEIGHT][WIN_WIDTH]; 
 
 /*********************************************************
  * This function saves the current image to a ppm file
@@ -24,9 +27,9 @@ void save_image() {
 	for(int y = 0; y < h; y++){
 		for(int x = 0; x < w; x++) {
 
-		float r = frame[y][x][0]; 
-		float g = frame[y][x][1]; 
-		float b = frame[y][x][2];
+		float r = frame[y][x].x; 
+		float g = frame[y][x].y; 
+		float b = frame[y][x].z;
 
 		bImg[index] = (b > 1.f) ? 255 : (unsigned char)(b*255); index++;
 		bImg[index] = (g > 1.f) ? 255 : (unsigned char)(g*255); index++;
@@ -93,15 +96,18 @@ void histogram_normalization() {
 
   for (i=0; i<win_height; i++) 
     for (j=0; j<win_width; j++) {
-      if (frame[i][j][0] > max_val) max_val = frame[i][j][0];
-      if (frame[i][j][1] > max_val) max_val = frame[i][j][1];
-      if (frame[i][j][2] > max_val) max_val = frame[i][j][2];
+      if (frame[i][j].x > max_val) max_val = frame[i][j].x;
+      if (frame[i][j].y > max_val) max_val = frame[i][j].y;
+      if (frame[i][j].z > max_val) max_val = frame[i][j].z;
     }
 
   for (i=0; i<win_height; i++) 
     for (j=0; j<win_width; j++) {
-      frame[i][j][0] /= max_val;
-      frame[i][j][1] /= max_val;
-      frame[i][j][2] /= max_val;
+      frame[i][j].x /= max_val;
+      frame[i][j].y /= max_val;
+      frame[i][j].z /= max_val;
     }
 }
+
+
+#endif

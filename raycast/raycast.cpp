@@ -12,6 +12,9 @@
  *  Some portions of the code was originally written by 
  *  M. vandePanne - and then modified by R. Zhang & H. Li
 ***********************************************************/
+#ifndef RAY_CAST
+#define RAY_CAST
+
 
 #include "include/Angel.h"
 
@@ -19,11 +22,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "trace.h"
+#include "tracer.h"
 #include "global.h"
 #include "sphere.h"
 #include "image_util.h"
 #include "scene.h"
+
+
+typedef vec3 Point;
+typedef vec3 Color;
 
 //
 // Global variables
@@ -34,10 +41,12 @@
 // global variables
 //
 
+const int numOfSpheres = 3;
+
 int win_width = WIN_WIDTH;
 int win_height = WIN_HEIGHT;
 
-GLfloat frame[WIN_HEIGHT][WIN_WIDTH][3];   
+vec3 **frame;   
 // array for the final image 
 // This gets displayed in glut window via texture mapping, 
 // you can also save a copy as bitmap by pressing 's'
@@ -46,17 +55,17 @@ float image_width = IMAGE_WIDTH;
 float image_height = (float(WIN_HEIGHT) / float(WIN_WIDTH)) * IMAGE_WIDTH;
 
 // some colors
-RGB_float background_clr; // background color
-RGB_float null_clr = {0.0, 0.0, 0.0};   // NULL color
+Color background_clr; // background color
+Color null_clr = vec3(0.0, 0.0, 0.0);   // NULL color
 
 //
 // these view parameters should be fixed
 //
-Point eye_pos = {0.0, 0.0, 0.0};  // eye position
+Point eye_pos = vec3(0.0, 0.0, 0.0);  // eye position
 float image_plane = -1.5;           // image plane position
 
 // list of spheres in the scene
-Spheres *scene = NULL;
+sphere **scene;
 
 // light 1 position and color
 Point light1;
@@ -86,6 +95,11 @@ const int NumPoints = 6;
 
 void init()
 {
+	frame = new vec3*[WIN_HEIGHT];
+	for (int i = 0; i < WIN_HEIGHT; ++i)
+	{
+		frame[i] = new vec3[WIN_WIDTH];
+	}
 	// Vertices of a square
 	double ext = 1.0;
 	vec4 points[NumPoints] = {
@@ -210,9 +224,9 @@ int main( int argc, char **argv )
 	}
 	
 	if (strcmp(argv[1], "-u") == 0) {  // user defined scene
-		set_up_user_scene();
+		scene = set_up_user_scene(numOfSpheres);
 	} else { // default scene
-		set_up_default_scene();
+		scene = set_up_default_scene(numOfSpheres);
 	}
 
 	step_max = atoi(argv[2]); // maximum level of recursions
@@ -230,7 +244,14 @@ int main( int argc, char **argv )
 	// happy to carry no parameters
 	//
 	printf("Rendering scene using my fantastic ray tracer ...\n");
-	ray_trace();
+	
+	tracer *rayTracer = new tracer(
+		frame, win_width, win_height,
+        image_width, image_height, image_plane,
+        eye_pos, background_clr, null_clr
+		);
+
+	rayTracer->ray_trace( falst, 1);
 
 	// we want to make sure that intensity values are normalized
 	histogram_normalization();
@@ -248,3 +269,7 @@ int main( int argc, char **argv )
 	glutMainLoop();
 	return 0;
 }
+
+
+
+#endif
