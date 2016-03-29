@@ -35,7 +35,7 @@ public:
   ~sphere();
 
   vec3 getNormal(Point Point);
-  sphere* intersect_scene(Point origin, vec3 v, sphere* spheres, Point* hitPoint);
+  sphere* intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint);
   
 };
 

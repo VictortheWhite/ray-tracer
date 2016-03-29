@@ -7,7 +7,7 @@
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-sphere* sphere::intersect_scene(Point origin, vec3 v, sphere* spheres, Point* hitPoint) {
+sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint) {
   return NULL;
 }
 
@@ -26,7 +26,11 @@ float sphere::intersect_sphere(Point origin, vec3 v, sphere sph, Point* hitPoint
 	return 0.0;
 }
 
+vec3 sphere::getNormal(Point point) {
+  return normalize(point - this->center);
+}
 
+sphere::sphere() {}
 sphere::sphere(Point ctr, float rad, float abm[], float dif[],
      float spe[], float shine, float refl) {
   static int INDEX = 0;
@@ -50,7 +54,7 @@ sphere::sphere(Point ctr, float rad, float abm[], float dif[],
   this->index = INDEX++;
 }
 
-vec3 sphere::getNormal(Point point) {
-  return normalize(point - this->center);
-}
+sphere::~sphere() {}
+
+
 

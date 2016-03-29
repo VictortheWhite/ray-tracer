@@ -34,7 +34,7 @@ private:
 	float decay_b;
 	float decay_c;
 
-	Color recursive_ray_trace();
+	Color recursive_ray_trace(vec3 ray, int step_max);
 
 	Color phong(Point p, vec3 v, vec3 surf_norm, sphere *sph);
 
