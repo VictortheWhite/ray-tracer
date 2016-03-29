@@ -19,6 +19,7 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   //  << background_clr.y << endl
   //  << background_clr.z << endl;
   this->null_clr = nullclr;
+  this->scene = scene;
 }
 
 
@@ -51,8 +52,7 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
 
   for (i = 0; i < win_height; i++) {
     for (j = 0; j < win_width; j++) {
-      //cout << "shit i: " << i << endl
-      //  << "shit j: " << j << endl;
+
       ray = normalize(cur_pixel_pos - eye_pos);
       //
       // You need to change this!!!
@@ -66,12 +66,7 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
       // ray.z = -1.0;
       // ret_color = recursive_ray_trace(cur_pixel_pos, ray, 1);
 
-      // Checkboard for testing
-      //Color clr = vec3(i/32, 0, j/32);
-      //ret_color = clr;
-
       frame[i][j] = ret_color;
-      //cout << frame[i][j] << endl;
       cur_pixel_pos.x += x_grid_size;
     }
 
@@ -84,15 +79,17 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
 //
 // do your thing here
 //
-  Point intersectionPoint;
   Color color;
   sphere SPH;
 
-  sphere *sph = SPH.intersect_scene(eye_pos, ray, scene, &intersectionPoint);
+  sphere *sph = SPH.intersect_scene(eye_pos, ray, scene);
+
   if (sph == NULL)
   {
     return background_clr;
-  }
+  } 
+
+  Point intersectionPoint = sph->getHitPoint();
   color = phong(intersectionPoint, ray, sph->getNormal(intersectionPoint), sph);
   return color;
 }

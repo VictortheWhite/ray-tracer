@@ -3,6 +3,7 @@
 
 #include "include/Angel.h"
 #include "math.h"
+#include <limits>
 
 using namespace std;
 
@@ -24,9 +25,11 @@ private:
 
   GLfloat reflectance;
 
+  Point hitPoint;
+
 
 private:
-  float intersect_sphere(Point origin, vec3 v, sphere sph, Point* hitPoint);
+  float intersect_sphere(Point origin, vec3 v);
 
 public:
   sphere();
@@ -35,7 +38,8 @@ public:
   ~sphere();
 
   vec3 getNormal(Point Point);
-  sphere* intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint);
+  Point getHitPoint();
+  sphere* intersect_scene(Point o, vec3 v, sphere** spheres);
   
 };
 

@@ -7,8 +7,28 @@
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint) {
-  return NULL;
+sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres) {
+  int numOfSpheres = 3;
+
+  sphere *sph = NULL;
+  float dst = std::numeric_limits<float>::infinity();
+
+  for (int i = 0; i < numOfSpheres; ++i)
+  {
+    float temDst = spheres[i]->intersect_sphere(origin, v);
+    if (temDst < dst)
+    {
+      sph = spheres[i];
+      dst = temDst;
+    }
+  }
+
+  if (dst == -1.0)
+  {
+    return NULL;
+  }
+
+  return sph;
 }
 
 
@@ -22,8 +42,41 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* h
  * If there is an intersection, the point of intersection should be
  * stored in the "hit" variable
  **********************************************************************/
-float sphere::intersect_sphere(Point origin, vec3 v, sphere sph, Point* hitPoint) {
-	return 0.0;
+float sphere::intersect_sphere(Point o, vec3 v) {
+	// delta = b^2 - 4ac
+
+  //cout << "give me some thit " << endl;
+  float b = 2 * dot(v, (o-this->center));
+  float a = dot(v, v);
+  float c = dot(o - this->center, o - this->center) - pow(this->radius, 2);
+
+  float delta = pow(b, 2) - 4*a*c;
+  
+  //cout << "delta" << delta << endl;
+
+  // no intersection
+  if(delta < 0) {
+    cout << delta << endl; 
+    return -1.0;
+  } else {
+  }
+
+  float x1 = (-b + sqrt(delta)) / (2 * a);
+  float x2 = (-b - sqrt(delta)) / (2 * a);
+
+  float t = x1>x2 ? x1:x2;
+
+  this->hitPoint = o + t * v;
+
+  //cout << t << ' ' << hitPoint  << endl;
+
+  return t;
+}
+
+
+
+Point sphere::getHitPoint() {
+  return this->hitPoint;
 }
 
 vec3 sphere::getNormal(Point point) {

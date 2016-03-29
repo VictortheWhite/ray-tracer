@@ -85,7 +85,7 @@ sphere** set_up_default_scene(int n) {
   float sphere3_specular[] = {0.0, 1.0, 0.0};
   float sphere3_shineness = 30;
   float sphere3_reflectance = 0.3;
-  scene[3] = new sphere(
+  scene[2] = new sphere(
     sphere3_ctr, 
     sphere3_rad, 
     sphere3_ambient,
