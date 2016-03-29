@@ -3,7 +3,8 @@
 
 tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
-                Point Eye,    Color bgclr, Color nullclr ) 
+                Point Eye,    Color bgclr, Color nullclr,
+                sphere **scene ) 
 {
   this->frame = frame;
   this->win_width = wWidth;
@@ -56,7 +57,7 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
       //
       // You need to change this!!!
       //
-      // ret_color = recursive_ray_trace();
+      //ret_color = recursive_ray_trace();
       ret_color = background_clr; // just background for now
 
       // Parallel rays can be cast instead using below
@@ -66,8 +67,8 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
       // ret_color = recursive_ray_trace(cur_pixel_pos, ray, 1);
 
       // Checkboard for testing
-      Color clr = vec3(i/32, 0, j/32);
-      ret_color = clr;
+      //Color clr = vec3(i/32, 0, j/32);
+      //ret_color = clr;
 
       frame[i][j] = ret_color;
       //cout << frame[i][j] << endl;

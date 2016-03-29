@@ -4,6 +4,8 @@
 #include "include/Angel.h"
 #include "math.h"
 
+using namespace std;
+
 typedef Angel::vec3 Point;
 typedef Angel::vec3 Color;
 

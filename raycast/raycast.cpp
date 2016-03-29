@@ -266,17 +266,11 @@ int main( int argc, char **argv )
 	tracer *rayTracer = new tracer(
 		frame, win_width, win_height,
         image_width, image_height, image_plane,
-        eye_pos, background_clr, null_clr
+        eye_pos, background_clr, null_clr,
+        scene
 		);
 
 	rayTracer->ray_trace( false, 1);
-
-	for (int i = 0; i < WIN_HEIGHT; ++i)
-	{
-		for(int j = 0; j<WIN_WIDTH; ++j) {
-			//cout << i << ' ' << j <<' ' << frame[i][j] << endl;
-		}
-	}
 
 	// we want to make sure that intensity values are normalized
 	histogram_normalization(frame);

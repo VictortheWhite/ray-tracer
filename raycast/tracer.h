@@ -5,7 +5,7 @@
 //#include <GL/glut.h>
 #include <math.h>
 #include "global.h"
-
+#include "sphere.h"
 using namespace std;
 
 class tracer
@@ -13,6 +13,7 @@ class tracer
 
 private:
 	vec3 **frame;
+	sphere **scene;
 
 	int win_width;
 	int win_height;
@@ -24,8 +25,6 @@ private:
 	Point eye_pos;
 	Color background_clr;
 	Color null_clr;
-
-	sphere **scene;
 
 	Point *LightSource;
 	float *LightItensity;
@@ -50,7 +49,8 @@ public:
 		float image,
 		Point Eye,
 		Color bgclr,
-		Color nullclr
+		Color nullclr,
+		sphere **scene
 		);
 	~tracer();
 	
