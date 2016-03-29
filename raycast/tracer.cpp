@@ -11,7 +11,7 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->win_height = wHeight;
   this->image_width = iWidth;
   this->image_height = iHeight;
-  this->image_width = image;
+  this->image_plane = image;
   this->eye_pos = Eye;
   this->background_clr = bgclr;
   //cout << "background_clr " << background_clr << endl;
@@ -48,7 +48,7 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
   cur_pixel_pos.y = y_start + 0.5 * y_grid_size;
   cur_pixel_pos.z = image_plane;
 
-  cout << win_height << endl << win_width << endl;
+  //cout << win_height << endl << win_width << endl;
 
   for (i = 0; i < win_height; i++) {
     for (j = 0; j < win_width; j++) {
@@ -84,6 +84,8 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
 
   sphere *sph = SPH.intersect_scene(eye_pos, ray, scene);
 
+  //cout << eye_pos << ' ' << ray << endl;
+
   if (sph == NULL)
   {
     return background_clr;
@@ -99,7 +101,7 @@ Color tracer::phong(Point p, vec3 v, vec3 surf_norm, sphere *sph) {
 //
 // do your thing here
 //
-  Color color;
+  Color color = vec3(1, 1, 1);
   return color;
 }
 

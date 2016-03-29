@@ -15,17 +15,12 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres) {
 
   for (int i = 0; i < numOfSpheres; ++i)
   {
-    float temDst = spheres[i]->intersect_sphere(origin, v);
-    if (temDst < dst)
+    float tempDst = spheres[i]->intersect_sphere(origin, v);
+    if (tempDst != -1.0 && tempDst < dst)
     {
       sph = spheres[i];
-      dst = temDst;
+      dst = tempDst;
     }
-  }
-
-  if (dst == -1.0)
-  {
-    return NULL;
   }
 
   return sph;
@@ -46,20 +41,16 @@ float sphere::intersect_sphere(Point o, vec3 v) {
 	// delta = b^2 - 4ac
 
   //cout << "give me some thit " << endl;
-  float b = 2 * dot(v, (o-this->center));
   float a = dot(v, v);
+  float b = 2 * dot(v, (o - this->center));
   float c = dot(o - this->center, o - this->center) - pow(this->radius, 2);
 
   float delta = pow(b, 2) - 4*a*c;
   
-  //cout << "delta" << delta << endl;
-
   // no intersection
   if(delta < 0) {
-    cout << delta << endl; 
     return -1.0;
-  } else {
-  }
+  } 
 
   float x1 = (-b + sqrt(delta)) / (2 * a);
   float x2 = (-b - sqrt(delta)) / (2 * a);
@@ -67,8 +58,6 @@ float sphere::intersect_sphere(Point o, vec3 v) {
   float t = x1>x2 ? x1:x2;
 
   this->hitPoint = o + t * v;
-
-  //cout << t << ' ' << hitPoint  << endl;
 
   return t;
 }
