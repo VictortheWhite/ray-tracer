@@ -6,6 +6,8 @@
 #include <math.h>
 #include "global.h"
 
+using namespace std;
+
 class tracer
 {
 

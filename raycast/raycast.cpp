@@ -29,6 +29,8 @@
 #include "scene.h"
 
 
+using namespace std;
+
 typedef vec3 Point;
 typedef vec3 Color;
 
@@ -55,7 +57,7 @@ float image_width = IMAGE_WIDTH;
 float image_height = (float(WIN_HEIGHT) / float(WIN_WIDTH)) * IMAGE_WIDTH;
 
 // some colors
-Color background_clr; // background color
+Color background_clr = vec3(1.0, 1.0, 1.0); // background color
 Color null_clr = vec3(0.0, 0.0, 0.0);   // NULL color
 
 //
@@ -95,11 +97,6 @@ const int NumPoints = 6;
 
 void init()
 {
-	frame = new vec3*[WIN_HEIGHT];
-	for (int i = 0; i < WIN_HEIGHT; ++i)
-	{
-		frame[i] = new vec3[WIN_WIDTH];
-	}
 	// Vertices of a square
 	double ext = 1.0;
 	vec4 points[NumPoints] = {
@@ -121,13 +118,26 @@ void init()
 		vec2( 1.0, 1.0 )
 	};
 
+	GLfloat newFrame[WIN_WIDTH][WIN_WIDTH][3];
+	for (int i = 0; i < WIN_WIDTH; ++i)
+	{
+		for (int j = 0; j < WIN_HEIGHT; ++j)
+		{
+			for (int k = 0; k < 3; ++k)
+			{
+				newFrame[i][j][k] = frame[i][j][k];
+			}
+		}
+	}
+
+
 	// Initialize texture objects
 	GLuint texture;
 	glGenTextures( 1, &texture );
 
 	glBindTexture( GL_TEXTURE_2D, texture );
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, WIN_WIDTH, WIN_HEIGHT, 0,
-		GL_RGB, GL_FLOAT, frame );
+		GL_RGB, GL_FLOAT, newFrame );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
@@ -202,7 +212,7 @@ void keyboard(unsigned char key, int x, int y)
 		exit(0);
 		break;
 	case 's':case 'S':
-		save_image();
+		save_image(frame);
 		glutPostRedisplay();
 		break;
 	default:
@@ -237,6 +247,14 @@ int main( int argc, char **argv )
 		if (strcmp(argv[i], "-s") == 0)	shadow_on = 1;
 	}
 
+
+	// initialize frame
+	frame = new vec3*[WIN_HEIGHT];
+	for (int i = 0; i < WIN_HEIGHT; ++i)
+	{
+		frame[i] = new vec3[WIN_WIDTH];
+	}
+
 	//
 	// ray trace the scene now
 	//
@@ -251,10 +269,18 @@ int main( int argc, char **argv )
         eye_pos, background_clr, null_clr
 		);
 
-	rayTracer->ray_trace( falst, 1);
+	rayTracer->ray_trace( false, 1);
+
+	for (int i = 0; i < WIN_HEIGHT; ++i)
+	{
+		for(int j = 0; j<WIN_WIDTH; ++j) {
+			//cout << i << ' ' << j <<' ' << frame[i][j] << endl;
+		}
+	}
 
 	// we want to make sure that intensity values are normalized
-	histogram_normalization();
+	histogram_normalization(frame);
+
 
 	// Show the result in glut via texture mapping
 	glutInit( &argc, argv );

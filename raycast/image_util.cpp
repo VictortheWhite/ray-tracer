@@ -10,14 +10,14 @@
 extern int win_width;
 extern int win_height;
 
-extern vec3 frame[WIN_HEIGHT][WIN_WIDTH]; 
+//extern vec3 frame[WIN_HEIGHT][WIN_WIDTH]; 
 
 /*********************************************************
  * This function saves the current image to a ppm file
  *		
  * DO NOT CHANGE
  *********************************************************/
-void save_image() {
+void save_image(vec3 **frame) {
 	int w = win_width;
 	int h = win_height;
 
@@ -90,9 +90,11 @@ void save_image() {
  *
  * DO NOT CHANGE
  **************************************************************/
-void histogram_normalization() {
+void histogram_normalization(vec3 **frame) {
   GLfloat max_val = 0.0;
   int i, j;
+
+  std::cout << win_height << std::endl << win_width << std::endl;
 
   for (i=0; i<win_height; i++) 
     for (j=0; j<win_width; j++) {

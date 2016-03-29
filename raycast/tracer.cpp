@@ -13,6 +13,10 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->image_width = image;
   this->eye_pos = Eye;
   this->background_clr = bgclr;
+  //cout << "background_clr " << background_clr << endl;
+  //cout << background_clr.x << endl
+  //  << background_clr.y << endl
+  //  << background_clr.z << endl;
   this->null_clr = nullclr;
 }
 
@@ -42,8 +46,12 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
   cur_pixel_pos.y = y_start + 0.5 * y_grid_size;
   cur_pixel_pos.z = image_plane;
 
+  cout << win_height << endl << win_width << endl;
+
   for (i = 0; i < win_height; i++) {
     for (j = 0; j < win_width; j++) {
+      //cout << "shit i: " << i << endl
+      //  << "shit j: " << j << endl;
       ray = cur_pixel_pos - eye_pos;
       //
       // You need to change this!!!
@@ -58,11 +66,11 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
       // ret_color = recursive_ray_trace(cur_pixel_pos, ray, 1);
 
       // Checkboard for testing
-      Color clr = vec3(float(i/32), 0, float(j/32));
+      Color clr = vec3(i/32, 0, j/32);
       ret_color = clr;
 
       frame[i][j] = ret_color;
-
+      //cout << frame[i][j] << endl;
       cur_pixel_pos.x += x_grid_size;
     }
 
