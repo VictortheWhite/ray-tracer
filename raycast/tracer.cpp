@@ -36,7 +36,7 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
  * ray tracer. Feel free to change other parts of the function however,
  * if you must.
  *********************************************************************/
-void tracer::ray_trace(bool shadow_on, int step_max) {
+void tracer::ray_trace(int step_max) {
   int i, j;
   float x_grid_size = image_width / (float)win_width;
   float y_grid_size = image_height / (float)win_height;
@@ -119,3 +119,9 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph) {
 }
 
 
+
+void tracer::set(bool shadow, bool refl, bool stoch) {
+  this->shadow_on = shadow;
+  this->reflection_on = refl;
+  this->stochastic_on = stoch;
+}

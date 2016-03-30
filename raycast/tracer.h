@@ -34,8 +34,11 @@ private:
 	float decay_b;
 	float decay_c;
 
-	Color recursive_ray_trace(vec3 ray, int step_max);
+	bool shadow_on;
+	bool reflection_on;
+	bool stochastic_on;
 
+	Color recursive_ray_trace(vec3 ray, int step_max);
 	Color phong(Point p, vec3 v, sphere *sph);
 
 
@@ -63,9 +66,10 @@ public:
 
 	void ray_trace(
 		// some options 
-		bool shadow_on,
 		int step_max
 		);
+
+	void set(bool, bool, bool);
 
 };
 
