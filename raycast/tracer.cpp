@@ -111,10 +111,10 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph) {
   }
 
 
-  vec3 l = normalize(p - LightSource);      // incomming light
+  vec3 l = normalize(LightSource - p);      // incomming light
   vec3 n = sph->getNormal(p);                // surface normal
   vec3 v = -ray;                            // viewpoint
-  vec3 r = 2.0 * dot(-l, n) * n + l;        // reflection vector
+  vec3 r = 2.0 * max(dot(l, n), 0.0) * n - l;        // reflection vector
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*pow(dst,2));
@@ -133,4 +133,9 @@ void tracer::set(bool shadow, bool refl, bool stoch) {
   this->shadow_on = shadow;
   this->reflection_on = refl;
   this->stochastic_on = stoch;
+}
+
+
+float tracer::max(float a, float b) {
+  return a > b? a : b;
 }

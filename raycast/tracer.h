@@ -41,6 +41,8 @@ private:
 	Color recursive_ray_trace(vec3 ray, int step_max);
 	Color phong(Point p, vec3 v, sphere *sph);
 
+	// helper methods
+	float max(float, float);
 
 public:
 	tracer(
