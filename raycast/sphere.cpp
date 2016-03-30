@@ -7,7 +7,7 @@
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres) {
+sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint) {
   int numOfSpheres = 3;
 
   sphere *sph = NULL;
@@ -15,7 +15,7 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres) {
 
   for (int i = 0; i < numOfSpheres; ++i)
   {
-    float tempDst = spheres[i]->intersect_sphere(origin, v);
+    float tempDst = spheres[i]->intersect_sphere(origin, v, hitPoint);
     if (tempDst != -1.0 && tempDst < dst)
     {
       sph = spheres[i];
@@ -37,7 +37,7 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres) {
  * If there is an intersection, the point of intersection should be
  * stored in the "hit" variable
  **********************************************************************/
-float sphere::intersect_sphere(Point o, vec3 v) {
+float sphere::intersect_sphere(Point o, vec3 v, Point* hitPoint) {
 	// delta = b^2 - 4ac
 
   //cout << "give me some thit " << endl;
@@ -57,15 +57,9 @@ float sphere::intersect_sphere(Point o, vec3 v) {
 
   float t = x1>x2 ? x1:x2;
 
-  this->hitPoint = o + t * v;
+  *hitPoint = o + t * v;
 
   return t;
-}
-
-
-
-Point sphere::getHitPoint() {
-  return this->hitPoint;
 }
 
 vec3 sphere::getNormal(Point point) {
@@ -73,21 +67,28 @@ vec3 sphere::getNormal(Point point) {
 }
 
 
-  vec3 sphere::getAmbient() {
-    return this->ambient;
-  }
-  vec3 sphere::getDiffuse() {
-    return this->diffuse;
-  }
-  vec3 sphere::getSpecular() {
-    return this->specular;
-  }
-  float sphere::getShineness() {
-    return this->shineness;
-  }
-  float sphere::getReflectance() {
-    return this->reflectance;
-  }
+vec3 sphere::getAmbient() {
+  return this->ambient;
+}
+vec3 sphere::getDiffuse() {
+  return this->diffuse;
+}
+vec3 sphere::getSpecular() {
+  return this->specular;
+}
+float sphere::getShineness() {
+  return this->shineness;
+}
+float sphere::getReflectance() {
+ return this->reflectance;
+}
+
+
+
+bool sphere::in_shadow(Point p, Point lightSource, sphere** spheres) {
+
+  return false;
+}
 
 
 sphere::sphere() {}

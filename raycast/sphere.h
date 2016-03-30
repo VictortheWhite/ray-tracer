@@ -25,11 +25,8 @@ private:
 
   float reflectance;
 
-  Point hitPoint;
-
-
 private:
-  float intersect_sphere(Point origin, vec3 v);
+  float intersect_sphere(Point origin, vec3 v, Point* hitPoint);
 
 public:
   sphere();
@@ -37,9 +34,9 @@ public:
      vec3 spe, float shine, float refl);
   ~sphere();
 
-  sphere* intersect_scene(Point o, vec3 v, sphere** spheres);
+  sphere* intersect_scene(Point o, vec3 v, sphere** spheres, Point* hitPoint);
 
-  Point getHitPoint();
+  bool in_shadow(Point p, Point lightSource, sphere** spheres);
 
   vec3 getNormal(Point Point);
   vec3 getAmbient();

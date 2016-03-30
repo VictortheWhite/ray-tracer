@@ -82,8 +82,10 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
 
   Color color;
   sphere SPH;
+  Point intersectionPoint;
 
-  sphere *sph = SPH.intersect_scene(eye_pos, ray, scene);
+
+  sphere *sph = SPH.intersect_scene(eye_pos, ray, scene, &intersectionPoint);
 
   //cout << eye_pos << ' ' << ray << endl;
 
@@ -92,7 +94,6 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
     return background_clr;
   } 
 
-  Point intersectionPoint = sph->getHitPoint();
 
   color = phong(intersectionPoint, ray, sph);
 
@@ -101,6 +102,14 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
 
 
 Color tracer::phong(Point p, vec3 ray, sphere *sph) {
+
+  float shadow = 1.0;
+
+  if (shadow_on)
+  {
+    
+  }
+
 
   vec3 l = normalize(p - LightSource);      // incomming light
   vec3 n = sph->getNormal(p);                // surface normal
