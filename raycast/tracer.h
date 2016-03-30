@@ -26,9 +26,9 @@ private:
 	Color background_clr;
 	Color null_clr;
 
-	Point *LightSource;
-	float *LightItensity;
-	float *global_ambient;
+	Point LightSource;
+	vec3  LightIntensity;
+	vec3  global_ambient;
 
 	float decay_a;
 	float decay_b;
@@ -50,6 +50,9 @@ public:
 		Point Eye,
 		Color bgclr,
 		Color nullclr,
+		Point LightSource,
+		vec3 LightIntensity,
+		vec3 global_ambient,
 		sphere **scene
 		);
 	~tracer();

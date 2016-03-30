@@ -4,7 +4,8 @@
 tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
                 Point Eye,    Color bgclr, Color nullclr,
-                sphere **scene ) 
+                Point LightSource, vec3 LightIntensity, 
+                vec3 global_ambient, sphere **scene ) 
 {
   this->frame = frame;
   this->win_width = wWidth;
@@ -14,10 +15,9 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->image_plane = image;
   this->eye_pos = Eye;
   this->background_clr = bgclr;
-  //cout << "background_clr " << background_clr << endl;
-  //cout << background_clr.x << endl
-  //  << background_clr.y << endl
-  //  << background_clr.z << endl;
+  this->LightSource = LightSource;
+  this->LightIntensity = LightIntensity;
+  this->global_ambient = global_ambient;
   this->null_clr = nullclr;
   this->scene = scene;
 }
@@ -54,11 +54,9 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
     for (j = 0; j < win_width; j++) {
 
       ray = normalize(cur_pixel_pos - eye_pos);
-      //
-      // You need to change this!!!
-      //
+
+      // recursive ray trace
       ret_color = recursive_ray_trace(ray, step_max);
-      //ret_color = background_clr; // just background for now
 
       // Parallel rays can be cast instead using below
       //
@@ -76,9 +74,7 @@ void tracer::ray_trace(bool shadow_on, int step_max) {
 }
 
 Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
-//
-// do your thing here
-//
+
   Color color;
   sphere SPH;
 
@@ -98,11 +94,14 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
 
 
 Color tracer::phong(Point p, vec3 v, vec3 surf_norm, sphere *sph) {
-//
-// do your thing here
-//
-  Color color = vec3(1, 1, 1);
-  return color;
+
+  //vec3 l = LightSource
+
+  vec3 ambientReflection = sph->getAmbient() * global_ambient;
+  //vec3 
+
+
+  return ambientReflection;
 }
 
 

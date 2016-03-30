@@ -18,12 +18,12 @@ private:
   Point center;
   float radius;
 
-  float mat_ambient[3];
-  float mat_diffuse[3];
-  float mat_specular[3];
-  float mat_shineness;
+  vec3 ambient;
+  vec3 diffuse;
+  vec3 specular;
+  float shineness;
 
-  GLfloat reflectance;
+  float reflectance;
 
   Point hitPoint;
 
@@ -33,13 +33,20 @@ private:
 
 public:
   sphere();
-  sphere(vec3 ctr, float rad, float abm[], float dif[],
-     float spe[], float shine, float refl);
+  sphere(vec3 ctr, float rad, vec3 abm, vec3 dif,
+     vec3 spe, float shine, float refl);
   ~sphere();
 
-  vec3 getNormal(Point Point);
-  Point getHitPoint();
   sphere* intersect_scene(Point o, vec3 v, sphere** spheres);
+
+  Point getHitPoint();
+
+  vec3 getNormal(Point Point);
+  vec3 getAmbient();
+  vec3 getDiffuse();
+  vec3 getSpecular();
+  float getShineness();
+  float getReflectance();
   
 };
 

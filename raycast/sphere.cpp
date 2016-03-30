@@ -72,25 +72,35 @@ vec3 sphere::getNormal(Point point) {
   return normalize(point - this->center);
 }
 
+
+  vec3 sphere::getAmbient() {
+    return this->ambient;
+  }
+  vec3 sphere::getDiffuse() {
+    return this->diffuse;
+  }
+  vec3 sphere::getSpecular() {
+    return this->specular;
+  }
+  float sphere::getShineness() {
+    return this->shineness;
+  }
+  float sphere::getReflectance() {
+    return this->reflectance;
+  }
+
+
 sphere::sphere() {}
-sphere::sphere(Point ctr, float rad, float abm[], float dif[],
-     float spe[], float shine, float refl) {
+sphere::sphere(Point ctr, float rad, vec3 abm, vec3 dif,
+     vec3 spe, float shine, float refl) {
   static int INDEX = 0;
   this->center = ctr;
   this->radius = rad;
-  for (int i = 0; i < 3; ++i)
-  {
-    this->mat_ambient[i] = abm[i];
-  }
-  for (int i = 0; i < 3; ++i)
-  {
-    this->mat_diffuse[i] = dif[i];
-  }
-  for (int i = 0; i < 3; ++i)
-  {
-    this->mat_specular[i] = spe[i];
-  }
-  this->mat_shineness = shine;
+
+  this->ambient = abm;
+  this->diffuse = dif;
+  this->specular = spe;
+  this->shineness = shine;
   this->reflectance = refl;
 
   this->index = INDEX++;

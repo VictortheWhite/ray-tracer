@@ -71,10 +71,10 @@ sphere **scene;
 
 // light 1 position and color
 Point light1;
-float light1_intensity[3];
+vec3 light1_intensity;
 
 // global ambient term
-float global_ambient[3];
+vec3 global_ambient;
 
 // light decay parameters
 float decay_a;
@@ -267,6 +267,7 @@ int main( int argc, char **argv )
 		frame, win_width, win_height,
         image_width, image_height, image_plane,
         eye_pos, background_clr, null_clr,
+        light1, light1_intensity, global_ambient,
         scene
 		);
 
