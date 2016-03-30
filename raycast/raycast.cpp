@@ -268,6 +268,7 @@ int main( int argc, char **argv )
         image_width, image_height, image_plane,
         eye_pos, background_clr, null_clr,
         light1, light1_intensity, global_ambient,
+        decay_a, decay_b, decay_c,
         scene
 		);
 

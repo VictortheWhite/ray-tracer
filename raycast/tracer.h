@@ -36,7 +36,7 @@ private:
 
 	Color recursive_ray_trace(vec3 ray, int step_max);
 
-	Color phong(Point p, vec3 v, vec3 surf_norm, sphere *sph);
+	Color phong(Point p, vec3 v, sphere *sph);
 
 
 public:
@@ -52,7 +52,10 @@ public:
 		Color nullclr,
 		Point LightSource,
 		vec3 LightIntensity,
-		vec3 global_ambient,
+		vec3 global_ambient, 
+		float decayA,
+		float decayB,
+		float decayC,
 		sphere **scene
 		);
 	~tracer();

@@ -5,7 +5,9 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
                 Point Eye,    Color bgclr, Color nullclr,
                 Point LightSource, vec3 LightIntensity, 
-                vec3 global_ambient, sphere **scene ) 
+                vec3 global_ambient, 
+                float decayA, float decayB, float decayC,
+                sphere **scene ) 
 {
   this->frame = frame;
   this->win_width = wWidth;
@@ -15,10 +17,13 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->image_plane = image;
   this->eye_pos = Eye;
   this->background_clr = bgclr;
+  this->null_clr = nullclr;
   this->LightSource = LightSource;
   this->LightIntensity = LightIntensity;
   this->global_ambient = global_ambient;
-  this->null_clr = nullclr;
+  this->decay_a = decayA;
+  this->decay_b = decayB;
+  this->decay_c = decayC;
   this->scene = scene;
 }
 
@@ -88,20 +93,29 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
   } 
 
   Point intersectionPoint = sph->getHitPoint();
-  color = phong(intersectionPoint, ray, sph->getNormal(intersectionPoint), sph);
+
+  color = phong(intersectionPoint, ray, sph);
+
   return color;
 }
 
 
-Color tracer::phong(Point p, vec3 v, vec3 surf_norm, sphere *sph) {
+Color tracer::phong(Point p, vec3 ray, sphere *sph) {
 
-  //vec3 l = LightSource
+  vec3 l = normalize(p - LightSource);      // incomming light
+  vec3 n = sph->getNormal(p);                // surface normal
+  vec3 v = -ray;                            // viewpoint
+  vec3 r = 2.0 * dot(-l, n) * n + l;        // reflection vector
+
+  float dst = length(p - LightSource);
+  float decay = 1.0 / (decay_a + decay_b*dst +decay_c*pow(dst,2));
 
   vec3 ambientReflection = sph->getAmbient() * global_ambient;
-  //vec3 
+  vec3 diffuseReflection = decay * LightIntensity * ( sph->getDiffuse() * dot(n, l)) ;
+  vec3 specularReflection = decay * LightIntensity * ( sph->getSpecular() * pow(dot(r, v), sph->getShineness()) );
 
 
-  return ambientReflection;
+  return ambientReflection + diffuseReflection + specularReflection;
 }
 
 
