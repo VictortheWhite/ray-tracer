@@ -4,7 +4,7 @@
 tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
                 Point Eye,    Color bgclr, Color nullclr,
-                Point LightSource, vec3 LightIntensity, 
+                Point lightSource, vec3 lightIntensity, 
                 vec3 global_ambient, 
                 float decayA, float decayB, float decayC,
                 sphere **scene ) 
@@ -18,8 +18,8 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->eye_pos = Eye;
   this->background_clr = bgclr;
   this->null_clr = nullclr;
-  this->LightSource = LightSource;
-  this->LightIntensity = LightIntensity;
+  this->LightSource = lightSource;
+  this->LightIntensity = lightIntensity;
   this->global_ambient = global_ambient;
   this->decay_a = decayA;
   this->decay_b = decayB;
@@ -90,16 +90,12 @@ Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
   sphere SPH;
   Point intersectionPoint;
 
-
   sphere *sph = SPH.intersect_scene(eye_pos, ray, scene, &intersectionPoint);
-
-  //cout << eye_pos << ' ' << ray << endl;
 
   if (sph == NULL)
   {
     return background_clr;
   } 
-
 
   color = phong(intersectionPoint, ray, sph);
 
@@ -122,17 +118,18 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph) {
     }
   }
 
-
-  vec3 l = normalize(LightSource - p);      // incomming light
-  vec3 n = sph->getNormal(p);                // surface normal
-  vec3 v = -ray;                            // viewpoint
-  vec3 r = 2.0 * dot(l, n) * n - l;        // reflection vector
+  vec3 l = normalize(LightSource - p);      // pointing to light
+  vec3 n = sph->getNormal(p);               // surface normal
+  vec3 v = normalize(eye_pos - p);          // viewpoint
+  vec3 r = 2.0 * dot(l, n) * n - l;         // reflection vector
 
   float dst = length(p - LightSource);
-  float decay = 1.0 / (decay_a + decay_b*dst +decay_c*pow(dst,2));
+  float decay = 1.0 / (decay_a + decay_b*dst +decay_c*dst*dst);
 
   vec3 ambientReflection = sph->getAmbient() * global_ambient;
-  vec3 diffuseReflection = decay * LightIntensity * ( sph->getDiffuse() * max(dot(n, l), 0) );
+
+
+  vec3 diffuseReflection = decay * LightIntensity *  sph->getDiffuse() * max(dot(n, l), 0) ;
   vec3 specularReflection = decay * LightIntensity * ( sph->getSpecular() * pow(dot(r, v), sph->getShineness()) );
 
 

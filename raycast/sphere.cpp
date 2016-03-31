@@ -55,7 +55,7 @@ float sphere::intersect_sphere(Point o, vec3 v, Point* hitPoint) {
   float x1 = (-b + sqrt(delta)) / (2 * a);
   float x2 = (-b - sqrt(delta)) / (2 * a);
 
-  float t = x1>x2 ? x1:x2;
+  float t = x1<x2 ? x1:x2;
 
   *hitPoint = o + t * v;
 

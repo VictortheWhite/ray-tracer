@@ -94,8 +94,6 @@ void histogram_normalization(vec3 **frame) {
   GLfloat max_val = 0.0;
   int i, j;
 
-  std::cout << win_height << std::endl << win_width << std::endl;
-
   for (i=0; i<win_height; i++) 
     for (j=0; j<win_width; j++) {
       if (frame[i][j].x > max_val) max_val = frame[i][j].x;
