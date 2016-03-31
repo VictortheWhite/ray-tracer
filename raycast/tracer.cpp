@@ -121,8 +121,8 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
   }
 
   vec3 l = normalize(LightSource - p);      // pointing to light
-  vec3 n = sph->getNormal(p);               // surface normal
-  vec3 v = normalize(eye_pos - p);          // viewpoint
+  vec3 n = normalize(sph->getNormal(p));               // surface normal
+  vec3 v = normalize(p - eye_pos);          // viewpoint
   vec3 r = 2.0 * dot(l, n) * n - l;         // reflection vector
 
   float dst = length(p - LightSource);
