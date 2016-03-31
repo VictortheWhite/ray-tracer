@@ -25,6 +25,9 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->decay_b = decayB;
   this->decay_c = decayC;
   this->scene = scene;
+
+  this->pixel_in_shadow = 0;
+  this->pixel_not_in_shadow = 0;
 }
 
 
@@ -76,6 +79,9 @@ void tracer::ray_trace(int step_max) {
     cur_pixel_pos.y += y_grid_size;
     cur_pixel_pos.x = x_start;
   }
+
+  cout << "in shadow: " << pixel_in_shadow << endl;
+  cout << "not in shadow: " << pixel_not_in_shadow << endl;
 }
 
 Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
@@ -107,24 +113,30 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph) {
 
   if (shadow_on)
   {
-    
+    if (sph->in_shadow(p, LightSource, scene))
+    {
+      shadow = 0.0;
+      pixel_in_shadow ++;
+    } else {
+      pixel_not_in_shadow ++;
+    }
   }
 
 
   vec3 l = normalize(LightSource - p);      // incomming light
   vec3 n = sph->getNormal(p);                // surface normal
   vec3 v = -ray;                            // viewpoint
-  vec3 r = 2.0 * max(dot(l, n), 0.0) * n - l;        // reflection vector
+  vec3 r = 2.0 * dot(l, n) * n - l;        // reflection vector
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*pow(dst,2));
 
   vec3 ambientReflection = sph->getAmbient() * global_ambient;
-  vec3 diffuseReflection = decay * LightIntensity * ( sph->getDiffuse() * dot(n, l)) ;
+  vec3 diffuseReflection = decay * LightIntensity * ( sph->getDiffuse() * max(dot(n, l), 0) );
   vec3 specularReflection = decay * LightIntensity * ( sph->getSpecular() * pow(dot(r, v), sph->getShineness()) );
 
 
-  return ambientReflection + diffuseReflection + specularReflection;
+  return ambientReflection + shadow * (diffuseReflection + specularReflection);
 }
 
 

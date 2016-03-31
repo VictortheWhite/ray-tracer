@@ -44,6 +44,10 @@ private:
 	// helper methods
 	float max(float, float);
 
+
+	int pixel_in_shadow;
+	int pixel_not_in_shadow;
+
 public:
 	tracer(
 		vec3 **frame,

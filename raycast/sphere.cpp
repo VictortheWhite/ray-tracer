@@ -87,7 +87,17 @@ float sphere::getReflectance() {
 
 bool sphere::in_shadow(Point p, Point lightSource, sphere** spheres) {
 
-  return false;
+  Point hitPoint;
+
+  sphere *sph = intersect_scene(p, normalize(lightSource-p), spheres, &hitPoint);
+
+  if (sph == NULL)
+  {
+    return false;
+  }
+
+  return sph != this;
+
 }
 
 
