@@ -246,8 +246,8 @@ int main( int argc, char **argv )
 	// Optional arguments
 	for(int i = 3; i < argc; i++)
 	{
-		if (strcmp(argv[i], "-s") == 0)	shadow_on = true;
-		if (strcmp(argv[i], "-l") == 0) reflection_on = true;
+		if (strcmp(argv[i], "+s") == 0)	shadow_on = true;
+		if (strcmp(argv[i], "+l") == 0) reflection_on = true;
 		
 	}
 

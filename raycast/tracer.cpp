@@ -40,6 +40,9 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
  * if you must.
  *********************************************************************/
 void tracer::ray_trace(int step_max) {
+
+  this->step_max = step_max;
+
   int i, j;
   float x_grid_size = image_width / (float)win_width;
   float y_grid_size = image_height / (float)win_height;
@@ -64,7 +67,7 @@ void tracer::ray_trace(int step_max) {
       ray = normalize(cur_pixel_pos - eye_pos);
 
       // recursive ray trace
-      ret_color = recursive_ray_trace(ray, step_max);
+      ret_color = recursive_ray_trace(eye_pos, ray, 0);
 
       // Parallel rays can be cast instead using below
       //
@@ -84,27 +87,26 @@ void tracer::ray_trace(int step_max) {
   cout << "not in shadow: " << pixel_not_in_shadow << endl;
 }
 
-Color tracer::recursive_ray_trace(vec3 ray, int step_max) {
+Color tracer::recursive_ray_trace(Point o, vec3 ray, int step) {
 
   Color color;
   sphere SPH;
   Point intersectionPoint;
 
-  sphere *sph = SPH.intersect_scene(eye_pos, ray, scene, &intersectionPoint);
+  sphere *sph = SPH.intersect_scene(o, ray, scene, &intersectionPoint);
 
   if (sph == NULL)
   {
     return background_clr;
   } 
 
-  color = phong(intersectionPoint, ray, sph);
+  color = phong(intersectionPoint, ray, sph, step);
 
   return color;
 }
 
 
-Color tracer::phong(Point p, vec3 ray, sphere *sph) {
-
+Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
   float shadow = 1.0;
 
   if (shadow_on)
@@ -130,10 +132,18 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph) {
 
 
   vec3 diffuseReflection = decay * LightIntensity *  sph->getDiffuse() * max(dot(n, l), 0) ;
-  vec3 specularReflection = decay * LightIntensity * ( sph->getSpecular() * pow(dot(r, v), sph->getShineness()) );
+  vec3 specularReflection = decay * LightIntensity * sph->getSpecular() * pow(dot(r, v), sph->getShineness());
 
+  vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
 
-  return ambientReflection + shadow * (diffuseReflection + specularReflection);
+  if (this->reflection_on && step < step_max)
+  {
+     //recursively trace
+    vec3 reflectedRay = 2.0*dot(v, n)*n - v;
+    color = color + sph->getReflectance()*recursive_ray_trace(p, reflectedRay, step+1);
+  }
+
+  return color;
 }
 
 
