@@ -44,6 +44,8 @@ public:
   vec3 getSpecular();
   float getShineness();
   float getReflectance();
+
+  vec3 getCenter();
   
 };
 

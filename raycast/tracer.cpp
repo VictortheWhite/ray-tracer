@@ -122,8 +122,19 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
 
   vec3 l = normalize(LightSource - p);      // pointing to light
   vec3 n = normalize(sph->getNormal(p));               // surface normal
-  vec3 v = normalize(p - eye_pos);          // viewpoint
-  vec3 r = 2.0 * dot(l, n) * n - l;         // reflection vector
+  vec3 v = normalize(eye_pos - p);          // viewpoint
+  vec3 r = 2.0 * dot(n, l) * n - l;         // reflection vector
+
+  /*
+  cout << "p: " << p << endl
+    << "eye: " << eye_pos << endl
+    << "light: " << LightSource << endl
+    << "ctr: " << sph->getCenter() << endl
+    << "l: " << l << endl
+    << "n: " << n << endl
+    << "v: " << v <<endl
+    << "r: " << r << endl << endl;
+  */
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*dst*dst);
@@ -132,7 +143,7 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
 
 
   vec3 diffuseReflection = decay * LightIntensity *  sph->getDiffuse() * max(dot(n, l), 0) ;
-  vec3 specularReflection = decay * LightIntensity * sph->getSpecular() * pow(dot(r, v), sph->getShineness());
+  vec3 specularReflection = decay * LightIntensity * sph->getSpecular() * pow(max(dot(r, v),0), sph->getShineness());
 
   vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
 

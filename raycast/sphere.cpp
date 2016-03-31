@@ -40,12 +40,11 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* h
 float sphere::intersect_sphere(Point o, vec3 v, Point* hitPoint) {
 	// delta = b^2 - 4ac
 
-  //cout << "give me some thit " << endl;
   float a = dot(v, v);
   float b = 2 * dot(v, (o - this->center));
   float c = dot(o - this->center, o - this->center) - pow(this->radius, 2);
 
-  float delta = pow(b, 2) - 4*a*c;
+  float delta = b*b - 4*a*c;
   
   // no intersection
   if(delta < 0) {
@@ -83,6 +82,9 @@ float sphere::getReflectance() {
  return this->reflectance;
 }
 
+vec3 sphere::getCenter() {
+  return this->center;
+}
 
 
 bool sphere::in_shadow(Point p, Point lightSource, sphere** spheres) {
