@@ -91,7 +91,7 @@ bool sphere::in_shadow(Point p, Point lightSource, sphere** spheres) {
 
   Point hitPoint;
 
-  sphere *sph = intersect_scene(p, normalize(lightSource-p), spheres, &hitPoint);
+  sphere *sph = intersect_scene(lightSource, normalize(p-lightSource), spheres, &hitPoint);
 
   if (sph == NULL)
   {
