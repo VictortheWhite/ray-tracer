@@ -7,7 +7,7 @@
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint) {
+sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* hitPoint, sphere* ignore) {
   int numOfSpheres = 3;
 
   sphere *sph = NULL;
@@ -15,8 +15,15 @@ sphere* sphere::intersect_scene(Point origin, vec3 v, sphere** spheres, Point* h
 
   for (int i = 0; i < numOfSpheres; ++i)
   {
+    if (spheres[i] == ignore)
+    {
+      // if intersects with ignored shpere
+      // ignore
+      continue;
+    }
+
     float tempDst = spheres[i]->intersect_sphere(origin, v, hitPoint);
-    if (tempDst != -1.0 && tempDst < dst)
+    if (tempDst >= 0.0 && tempDst < dst)
     {
       sph = spheres[i];
       dst = tempDst;
@@ -91,15 +98,9 @@ bool sphere::in_shadow(Point p, Point lightSource, sphere** spheres) {
 
   Point hitPoint;
 
-  sphere *sph = intersect_scene(lightSource, normalize(p-lightSource), spheres, &hitPoint);
+  sphere *sph = intersect_scene(p, normalize(lightSource-p), spheres, &hitPoint, this);
 
-  if (sph == NULL)
-  {
-    return false;
-  }
-
-  return sph != this;
-
+  return sph != NULL;
 }
 
 

@@ -34,7 +34,7 @@ public:
      vec3 spe, float shine, float refl);
   ~sphere();
 
-  sphere* intersect_scene(Point o, vec3 v, sphere** spheres, Point* hitPoint);
+  sphere* intersect_scene(Point o, vec3 v, sphere** spheres, Point* hitPoint, sphere* ignore);
 
   bool in_shadow(Point p, Point lightSource, sphere** spheres);
 

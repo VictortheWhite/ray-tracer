@@ -67,7 +67,7 @@ void tracer::ray_trace(int step_max) {
       ray = normalize(cur_pixel_pos - eye_pos);
 
       // recursive ray trace
-      ret_color = recursive_ray_trace(eye_pos, ray, 0);
+      ret_color = recursive_ray_trace(eye_pos, ray, 0, NULL);
 
       // Parallel rays can be cast instead using below
       //
@@ -87,13 +87,13 @@ void tracer::ray_trace(int step_max) {
   cout << "not in shadow: " << pixel_not_in_shadow << endl;
 }
 
-Color tracer::recursive_ray_trace(Point o, vec3 ray, int step) {
+Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, sphere* ignore) {
 
   Color color;
   sphere SPH;
   Point intersectionPoint;
 
-  sphere *sph = SPH.intersect_scene(o, ray, scene, &intersectionPoint);
+  sphere *sph = SPH.intersect_scene(o, ray, scene, &intersectionPoint, ignore);
 
   if (sph == NULL)
   {
@@ -121,20 +121,9 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
   }
 
   vec3 l = normalize(LightSource - p);      // pointing to light
-  vec3 n = normalize(sph->getNormal(p));               // surface normal
+  vec3 n = normalize(sph->getNormal(p));    // surface normal
   vec3 v = normalize(eye_pos - p);          // viewpoint
   vec3 r = 2.0 * dot(n, l) * n - l;         // reflection vector
-
-  /*
-  cout << "p: " << p << endl
-    << "eye: " << eye_pos << endl
-    << "light: " << LightSource << endl
-    << "ctr: " << sph->getCenter() << endl
-    << "l: " << l << endl
-    << "n: " << n << endl
-    << "v: " << v <<endl
-    << "r: " << r << endl << endl;
-  */
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*dst*dst);
@@ -147,11 +136,11 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
 
   vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
 
-  if (this->reflection_on && step < step_max)
+  if (reflection_on && step < step_max)
   {
      //recursively trace
     vec3 reflectedRay = 2.0*dot(v, n)*n - v;
-    color = color + sph->getReflectance()*recursive_ray_trace(p, reflectedRay, step+1);
+    color = color + sph->getReflectance()*recursive_ray_trace(p, reflectedRay, step+1, sph);
   }
 
   return color;

@@ -41,7 +41,7 @@ private:
 	bool stochastic_on;
 
 
-	Color recursive_ray_trace(Point o, vec3 ray, int step);
+	Color recursive_ray_trace(Point o, vec3 ray, int step, sphere* ignore);
 	Color phong(Point p, vec3 v, sphere *sph, int step);
 
 	// helper methods
