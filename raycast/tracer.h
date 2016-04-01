@@ -6,6 +6,7 @@
 #include <math.h>
 #include "global.h"
 #include "sphere.h"
+#include "object.h"
 using namespace std;
 
 class tracer
@@ -13,7 +14,7 @@ class tracer
 
 private:
 	vec3 **frame;
-	sphere **scene;
+	object **scene;
 
 	int win_width;
 	int win_height;
@@ -41,8 +42,8 @@ private:
 	bool stochastic_on;
 
 
-	Color recursive_ray_trace(Point o, vec3 ray, int step, sphere* ignore);
-	Color phong(Point p, vec3 v, sphere *sph, int step);
+	Color recursive_ray_trace(Point o, vec3 ray, int step, object* ignore);
+	Color phong(Point p, vec3 v, object *obj, int step);
 
 	// helper methods
 	float max(float, float);
@@ -68,7 +69,7 @@ public:
 		float decayA,
 		float decayB,
 		float decayC,
-		sphere **scene
+		object **scene
 		);
 	~tracer();
 	

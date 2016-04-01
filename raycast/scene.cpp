@@ -19,7 +19,7 @@ extern float decay_c;
 /*******************************************
  * set up the default scene - DO NOT CHANGE
  *******************************************/
-sphere** set_up_default_scene(int n) {
+object** set_up_default_scene(int n) {
   // set background color
   background_clr.x = 0.5;   // r
   background_clr.y = 0.05;  // g
@@ -38,7 +38,7 @@ sphere** set_up_default_scene(int n) {
   decay_c = 0.0;
 
   // set up spheres
-  sphere **scene = new sphere*[n];
+  object **scene = new object*[n];
 
 
   // sphere 1
@@ -98,5 +98,5 @@ sphere** set_up_default_scene(int n) {
 /***************************************
  * You can create your own scene here
  ***************************************/
-sphere** set_up_user_scene(int n) {
+object** set_up_user_scene(int n) {
 }

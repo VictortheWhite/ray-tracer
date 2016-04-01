@@ -7,7 +7,7 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 Point lightSource, vec3 lightIntensity, 
                 vec3 global_ambient, 
                 float decayA, float decayB, float decayC,
-                sphere **scene ) 
+                object **scene ) 
 {
   this->frame = frame;
   this->win_width = wWidth;
@@ -87,31 +87,30 @@ void tracer::ray_trace(int step_max) {
   cout << "not in shadow: " << pixel_not_in_shadow << endl;
 }
 
-Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, sphere* ignore) {
+Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
 
   Color color;
-  sphere SPH;
   Point intersectionPoint;
 
-  sphere *sph = SPH.intersect_scene(o, ray, scene, &intersectionPoint, ignore);
+  object *obj = object::intersect_scene(o, ray, scene, &intersectionPoint, ignore);
 
-  if (sph == NULL)
+  if (obj == NULL)
   {
     return background_clr;
   } 
 
-  color = phong(intersectionPoint, ray, sph, step);
+  color = phong(intersectionPoint, ray, obj, step);
 
   return color;
 }
 
 
-Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
+Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
   float shadow = 1.0;
 
   if (shadow_on)
   {
-    if (sph->in_shadow(p, LightSource, scene))
+    if (obj->in_shadow(p, LightSource, scene))
     {
       shadow = 0.0;
       pixel_in_shadow ++;
@@ -121,18 +120,18 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
   }
 
   vec3 l = normalize(LightSource - p);      // pointing to light
-  vec3 n = normalize(sph->getNormal(p));    // surface normal
+  vec3 n = normalize(obj->getNormal(p));    // surface normal
   vec3 v = normalize(eye_pos - p);          // viewpoint
   vec3 r = 2.0 * dot(n, l) * n - l;         // reflection vector
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*dst*dst);
 
-  vec3 ambientReflection = sph->getAmbient() * global_ambient;
+  vec3 ambientReflection = obj->getAmbient(p) * global_ambient;
 
 
-  vec3 diffuseReflection = decay * LightIntensity *  sph->getDiffuse() * max(dot(n, l), 0) ;
-  vec3 specularReflection = decay * LightIntensity * sph->getSpecular() * pow(max(dot(r, v),0), sph->getShineness());
+  vec3 diffuseReflection = decay * LightIntensity *  obj->getDiffuse(p) * max(dot(n, l), 0) ;
+  vec3 specularReflection = decay * LightIntensity * obj->getSpecular(p) * pow(max(dot(r, v),0), obj->getShineness(p));
 
   vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
 
@@ -140,7 +139,7 @@ Color tracer::phong(Point p, vec3 ray, sphere *sph, int step) {
   {
      //recursively trace
     vec3 reflectedRay = 2.0*dot(v, n)*n - v;
-    color = color + sph->getReflectance()*recursive_ray_trace(p, reflectedRay, step+1, sph);
+    color = color + obj->getReflectance(p)*recursive_ray_trace(p, reflectedRay, step+1, obj);
   }
 
   return color;
