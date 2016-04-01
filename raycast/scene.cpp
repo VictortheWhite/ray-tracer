@@ -2,6 +2,7 @@
 // this provide functions to set up the scene
 //
 #include "sphere.h"
+#include "chessBoard.h"
 #include <stdio.h>
 
 extern Point light1;
@@ -13,6 +14,11 @@ extern Color background_clr;
 extern float decay_a;
 extern float decay_b;
 extern float decay_c;
+
+extern bool chessBoard_on;
+
+
+void addChessBoard(vector<object*> &scene);
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +102,12 @@ vector<object*> set_up_default_scene(int n) {
 		sphere3_reflectance);
   scene.push_back(obj3);
 
+
+  if (chessBoard_on)
+  {
+    addChessBoard(scene);
+  }
+
   return scene;
 }
 
@@ -103,4 +115,11 @@ vector<object*> set_up_default_scene(int n) {
  * You can create your own scene here
  ***************************************/
 vector<object*> set_up_user_scene(int n) {
+}
+
+
+
+void addChessBoard(vector<object*> &scene) {
+  object *board = new chessBoard();
+  scene.push_back(board);
 }

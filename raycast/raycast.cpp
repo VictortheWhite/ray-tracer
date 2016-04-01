@@ -91,6 +91,7 @@ int step_max = 1;
 bool shadow_on = false;
 bool reflection_on = false;
 bool stochastic_on = false;
+bool chessBoard_on = false;
 
 
 // OpenGL
@@ -249,6 +250,7 @@ int main( int argc, char **argv )
 	{
 		if (strcmp(argv[i], "+s") == 0)	shadow_on = true;
 		if (strcmp(argv[i], "+l") == 0) reflection_on = true;
+		if (strcmp(argv[i], "+c") == 0) chessBoard_on = true;
 		
 	}
 

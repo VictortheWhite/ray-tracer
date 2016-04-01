@@ -41,7 +41,7 @@ vec3 sphere::getNormal(Point point) {
 
 
 
-bool sphere::in_shadow(Point p, Point lightSource, vector<object*> objects) {
+bool sphere::in_shadow(Point p, Point lightSource, vector<object*> &objects) {
 
   Point hitPoint;
 

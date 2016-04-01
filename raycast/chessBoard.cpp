@@ -30,7 +30,7 @@
 		return this->normal;
 	}
 
-  	bool chessBoard::in_shadow(Point p, Point LightSource, object** objects) {
+  	bool chessBoard::in_shadow(Point p, Point LightSource, vector<object*> &objects) {
   		return false;
   	}
 

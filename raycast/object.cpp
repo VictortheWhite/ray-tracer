@@ -43,8 +43,8 @@ float object::getReflectance(Point p) {
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-object* object::intersect_scene(Point origin, vec3 v, vector<object*> objects, Point* hitPoint, object* ignore) {
-  int numOfObjects = 3;
+object* object::intersect_scene(Point origin, vec3 v, vector<object*> &objects, Point* hitPoint, object* ignore) {
+  int numOfObjects = objects.size();
 
   object *obj = NULL;
   float dst = std::numeric_limits<float>::infinity();

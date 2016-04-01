@@ -29,7 +29,7 @@ public:
 
   vec3 getNormal(Point Point);
 
-  bool in_shadow(Point p, Point lightSource, vector<object*> objects);
+  bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
 };
 
 

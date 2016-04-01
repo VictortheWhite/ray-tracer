@@ -23,7 +23,7 @@ public:
 
 
 	vec3 getNormal(Point Point);
-  	bool in_shadow(Point, Point, object**);
+  	bool in_shadow(Point, Point, vector<object*>&);
   	float intersect_object(Point, vec3, Point*);	
 };
 
