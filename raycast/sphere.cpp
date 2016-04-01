@@ -1,9 +1,6 @@
 #include "sphere.h"
 
 
-
-
-
 /**********************************************************************
  * This function intersects a ray with a given sphere 'sph'. You should
  * use the parametric representation of a line and do the intersection.
@@ -44,7 +41,7 @@ vec3 sphere::getNormal(Point point) {
 
 
 
-bool sphere::in_shadow(Point p, Point lightSource, object** objects) {
+bool sphere::in_shadow(Point p, Point lightSource, vector<object*> objects) {
 
   Point hitPoint;
 

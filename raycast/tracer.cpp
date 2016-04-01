@@ -7,7 +7,7 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 Point lightSource, vec3 lightIntensity, 
                 vec3 global_ambient, 
                 float decayA, float decayB, float decayC,
-                object **scene ) 
+                vector<object*> scene ) 
 {
   this->frame = frame;
   this->win_width = wWidth;

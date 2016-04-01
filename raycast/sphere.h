@@ -3,7 +3,8 @@
 
 //#include "include/Angel.h"
 #include "object.h"
-#include "math.h"
+#include <vector>
+//#include "math.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ public:
 
   vec3 getNormal(Point Point);
 
-  bool in_shadow(Point p, Point lightSource, object** objects);
+  bool in_shadow(Point p, Point lightSource, vector<object*> objects);
 };
 
 

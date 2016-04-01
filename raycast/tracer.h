@@ -14,7 +14,7 @@ class tracer
 
 private:
 	vec3 **frame;
-	object **scene;
+	vector<object*> scene;
 
 	int win_width;
 	int win_height;
@@ -69,7 +69,7 @@ public:
 		float decayA,
 		float decayB,
 		float decayC,
-		object **scene
+		vector<object*> scene
 		);
 	~tracer();
 	

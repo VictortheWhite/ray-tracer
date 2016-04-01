@@ -17,7 +17,7 @@ INCLUDEDIR=/usr/include/
 LIBDIR=/usr/lib
 
 # If you have more source files add them here 
-SOURCE= scene.cpp image_util.cpp object.cpp sphere.cpp tracer.cpp raycast.cpp include/InitShader.cpp
+SOURCE= scene.cpp image_util.cpp object.cpp sphere.cpp chessBoard.cpp tracer.cpp raycast.cpp include/InitShader.cpp
 
 # The compiler we are using 
 CC= g++

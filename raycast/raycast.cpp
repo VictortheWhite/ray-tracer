@@ -68,7 +68,7 @@ Point eye_pos = vec3(0.0, 0.0, 0.0);  // eye position
 float image_plane = -1.5;           // image plane position
 
 // list of spheres in the scene
-object **scene;
+vector<object*> scene;
 
 // light 1 position and color
 Point light1;
@@ -211,7 +211,7 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'q':case 'Q':
-		free(scene);
+		//free(scene);
 		exit(0);
 		break;
 	case 's':case 'S':

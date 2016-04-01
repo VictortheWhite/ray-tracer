@@ -3,6 +3,8 @@
 
 #include "include/Angel.h"
 #include <limits>
+#include <cmath>
+#include <vector>
 
 
 using namespace std;
@@ -35,10 +37,10 @@ public:
 
 
 	virtual vec3 getNormal(Point Point) = 0;
-  virtual bool in_shadow(Point, Point, object**) = 0;
-  virtual float intersect_object(Point, vec3, Point*) = 0;
+  virtual bool in_shadow(Point p, Point lightSource, vector<object*> objects) = 0;
+  virtual float intersect_object(Point o, vec3 v, Point* hitPoint) = 0;
 
-  static object* intersect_scene(Point o, vec3 v, object** objects, Point* hitPoint, object* ignore);
+  static object* intersect_scene(Point o, vec3 v, vector<object*> objects, Point* hitPoint, object* ignore);
 
 
 };

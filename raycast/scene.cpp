@@ -19,7 +19,7 @@ extern float decay_c;
 /*******************************************
  * set up the default scene - DO NOT CHANGE
  *******************************************/
-object** set_up_default_scene(int n) {
+vector<object*> set_up_default_scene(int n) {
   // set background color
   background_clr.x = 0.5;   // r
   background_clr.y = 0.05;  // g
@@ -38,7 +38,7 @@ object** set_up_default_scene(int n) {
   decay_c = 0.0;
 
   // set up spheres
-  object **scene = new object*[n];
+  vector<object*> scene;
 
 
   // sphere 1
@@ -49,7 +49,7 @@ object** set_up_default_scene(int n) {
   vec3 sphere1_specular = vec3(1.0, 1.0, 1.0);
   float sphere1_shineness = 10;
   float sphere1_reflectance = 0.4;
-  scene[0] = new sphere(
+  object *obj1 = new sphere(
     sphere1_ctr, 
     sphere1_rad, 
     sphere1_ambient,
@@ -57,6 +57,8 @@ object** set_up_default_scene(int n) {
     sphere1_specular, 
     sphere1_shineness,
 		sphere1_reflectance);
+  scene.push_back(obj1);
+
 
   // sphere 2
   Point sphere2_ctr = vec3(-1.5, 0.0, -3.5);
@@ -66,7 +68,7 @@ object** set_up_default_scene(int n) {
   vec3 sphere2_specular = vec3(1.0, 1.0, 1.0);
   float sphere2_shineness = 6;
   float sphere2_reflectance = 0.3;
-  scene[1] = new sphere(
+  object *obj2 = new sphere(
     sphere2_ctr, 
     sphere2_rad, 
     sphere2_ambient,
@@ -74,6 +76,7 @@ object** set_up_default_scene(int n) {
     sphere2_specular, 
     sphere2_shineness,
 		sphere2_reflectance);
+  scene.push_back(obj2);
 
   // sphere 3
   Point sphere3_ctr = vec3(-0.35, 1.75, -2.25);
@@ -83,7 +86,7 @@ object** set_up_default_scene(int n) {
   vec3 sphere3_specular = vec3(0.0, 1.0, 0.0);
   float sphere3_shineness = 30;
   float sphere3_reflectance = 0.3;
-  scene[2] = new sphere(
+  object *obj3 = new sphere(
     sphere3_ctr, 
     sphere3_rad, 
     sphere3_ambient,
@@ -91,6 +94,7 @@ object** set_up_default_scene(int n) {
     sphere3_specular, 
     sphere3_shineness,
 		sphere3_reflectance);
+  scene.push_back(obj3);
 
   return scene;
 }
@@ -98,5 +102,5 @@ object** set_up_default_scene(int n) {
 /***************************************
  * You can create your own scene here
  ***************************************/
-object** set_up_user_scene(int n) {
+vector<object*> set_up_user_scene(int n) {
 }

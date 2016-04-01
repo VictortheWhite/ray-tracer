@@ -43,7 +43,7 @@ float object::getReflectance(Point p) {
  * which arguments to use for the function. For exmaple, note that you
  * should return the point of intersection to the calling function.
  **********************************************************************/
-object* object::intersect_scene(Point origin, vec3 v, object** objects, Point* hitPoint, object* ignore) {
+object* object::intersect_scene(Point origin, vec3 v, vector<object*> objects, Point* hitPoint, object* ignore) {
   int numOfObjects = 3;
 
   object *obj = NULL;
