@@ -237,12 +237,6 @@ int main( int argc, char **argv )
 		return -1;
 	}
 	
-	if (strcmp(argv[1], "-u") == 0) {  // user defined scene
-		scene = set_up_user_scene(numOfSpheres);
-	} else { // default scene
-		scene = set_up_default_scene(numOfSpheres);
-	}
-
 	step_max = atoi(argv[2]); // maximum level of recursions
 
 	// Optional arguments
@@ -254,6 +248,14 @@ int main( int argc, char **argv )
 		
 	}
 
+	// setup scene
+	if (strcmp(argv[1], "-u") == 0) {  
+		// user defined scene
+		scene = set_up_user_scene(numOfSpheres);
+	} else { 
+		// default scene
+		scene = set_up_default_scene(numOfSpheres);
+	}
 
 	// initialize frame
 	frame = new vec3*[WIN_HEIGHT];

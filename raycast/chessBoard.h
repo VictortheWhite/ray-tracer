@@ -8,7 +8,7 @@ class chessBoard : public object
 
 private:
 	vec3 normal;
-	Point pOrigin;
+	Point pOrigin;	// center of the chess board
 	float width;
 
 public:

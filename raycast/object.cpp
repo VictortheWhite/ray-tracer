@@ -1,7 +1,7 @@
 #include "object.h"
 
 
-object::object() {}
+object::object() { this->index = 3;}
 object::object(vec3 abm, vec3 dif, vec3 spe, float shine, float refl) {
   static int INDEX = 0;
   this->ambient = abm;
@@ -31,6 +31,9 @@ float object::getReflectance(Point p) {
  return this->reflectance;
 }
 
+int object::getIndex() {
+  return this->index;
+}
 
 //vec3 getNormal(Point) = 0;
 //bool in_shadow() = 0;
@@ -58,13 +61,27 @@ object* object::intersect_scene(Point origin, vec3 v, vector<object*> &objects, 
       continue;
     }
 
-    float tempDst = objects[i]->intersect_object(origin, v, hitPoint);
+    vec3 tempHit;
+    float tempDst = objects[i]->intersect_object(origin, v, &tempHit);
+    //cout << i << ' ' << tempDst << endl;
+
     if (tempDst >= 0.0 && tempDst < dst)
     {
       obj = objects[i];
       dst = tempDst;
+      *hitPoint = tempHit;
     }
   }
 
   return obj;
 }
+
+bool object::in_shadow(Point p, Point lightSource, vector<object*> &objects) {
+
+  Point hitPoint;
+
+  object *obj = intersect_scene(p, normalize(lightSource-p), objects, &hitPoint, this);
+
+  return obj != NULL;
+}
+

@@ -106,6 +106,7 @@ vector<object*> set_up_default_scene(int n) {
   if (chessBoard_on)
   {
     addChessBoard(scene);
+    cout << "size " << scene.size() << endl;
   }
 
   return scene;

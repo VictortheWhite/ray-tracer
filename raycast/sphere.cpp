@@ -12,8 +12,8 @@
  * stored in the "hit" variable
  **********************************************************************/
 float sphere::intersect_object(Point o, vec3 v, Point* hitPoint) {
-	// delta = b^2 - 4ac
 
+	// delta = b^2 - 4ac
   float a = dot(v, v);
   float b = 2 * dot(v, (o - this->center));
   float c = dot(o - this->center, o - this->center) - pow(this->radius, 2);
@@ -30,24 +30,19 @@ float sphere::intersect_object(Point o, vec3 v, Point* hitPoint) {
 
   float t = x1<x2 ? x1:x2;
 
+  if (t < 0.0)
+  {
+    return -1.0;
+  }
+
   *hitPoint = o + t * v;
 
   return t;
 }
 
 vec3 sphere::getNormal(Point point) {
-  return normalize(point - this->center);
-}
-
-
-
-bool sphere::in_shadow(Point p, Point lightSource, vector<object*> &objects) {
-
-  Point hitPoint;
-
-  object *obj = intersect_scene(p, normalize(lightSource-p), objects, &hitPoint, this);
-
-  return obj != NULL;
+  vec3 n = normalize(point - this->center);
+  return n;
 }
 
 vec3 sphere::getCenter() {
@@ -62,6 +57,8 @@ sphere::sphere(Point ctr, float rad, vec3 abm, vec3 dif,
 {
   this->center = ctr;
   this->radius = rad;  
+
+  cout << "shpere " << index << endl;
 }
 
 sphere::~sphere() {
