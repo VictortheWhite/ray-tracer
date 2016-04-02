@@ -10,16 +10,29 @@ chessBoard::chessBoard() {
 chessBoard::~chessBoard() {}
 
 vec3 chessBoard::getAmbient(Point p) {
-	return vec3(0.2,0.2,0.2);
+	int x = (int)(p-pOrigin-width).x;
+	int y = (int)(p-pOrigin-width).z;
+
+	if ( (x+y)%2 == 0) {
+		return vec3(0.6, 0.6, 0.6);
+	} else {
+		return vec3(0.2,0.2,0.2);
+	}
 }
 
 vec3 chessBoard::getDiffuse(Point p) {
-  		//return vec3(1.0 ,1.0 ,1.0);
-   		return vec3(0.0, 0.0, 0.0);
+
+	int x = (int)(p-pOrigin-width).x;
+	int y = (int)(p-pOrigin-width).z;
+
+	if ( (x+y)%2 == 0) {
+		return vec3(0.8, 0.8, 0.8);
+	} else {
+		return vec3(0.2,0.2,0.2);
+	}
 }
 
 vec3 chessBoard::getSpecular(Point p) {
- 	//return vec3(1.0, 1.0, 1.0);
    return vec3(0, 0, 0);
 }
 
@@ -28,7 +41,7 @@ float chessBoard::getShineness(Point p) {
 }
 
 float chessBoard::getReflectance(Point p) {
-	return 0.3;
+	return 0.7;
 }
 
 
