@@ -11,6 +11,10 @@ private:
 	Point pOrigin;	// center of the chess board
 	float width;
 
+	vec3 refract(Point p, vec3 l, bool& isRefracted);
+	float intersect_object(Point, vec3, Point*);	
+
+
 public:
 	chessBoard();
 	~chessBoard();
@@ -21,9 +25,8 @@ public:
   	float getShineness(Point);
   	float getReflectance(Point);
 
-
 	vec3 getNormal(Point Point);
-  	float intersect_object(Point, vec3, Point*);	
+  	bool getRefractedRayOutObject(Point p, vec3 l, Point& outPoint, vec3& refractedRayOut);
 };
 
 

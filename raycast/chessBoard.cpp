@@ -77,3 +77,12 @@ float chessBoard::intersect_object(Point o, vec3 v, Point* hitPoint) {
 
 	return t;
 }
+
+
+bool chessBoard::getRefractedRayOutObject(Point p, vec3 l, Point& outPoint, vec3& refractedRayOut) {
+	return false;
+}
+
+vec3 chessBoard::refract(Point p, vec3 l, bool& isRefracted) {
+	return vec3();
+}

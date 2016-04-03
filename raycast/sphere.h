@@ -19,7 +19,7 @@ private:
 
   float intersect_object(Point o, vec3 v, Point* hitPoint);
   float intersect_object(Point o, vec3 v, Point* hitPoint, bool getNearSide);
-
+  vec3 refract(Point p, vec3 l, bool& isRefracted);
 public:
   sphere();
   sphere(vec3 ctr, float rad, vec3 abm, vec3 dif,
@@ -28,6 +28,7 @@ public:
 
   vec3 getCenter();
   vec3 getNormal(Point point);
+  bool getRefractedRayOutObject(Point p, vec3 l, Point& outPoint, vec3& refractedRayOut);
 
   //bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
 };

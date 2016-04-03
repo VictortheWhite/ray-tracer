@@ -12,40 +12,6 @@
  * stored in the "hit" variable
  **********************************************************************/
 float sphere::intersect_object(Point o, vec3 v, Point* hitPoint) {
-
-  /*
-	// delta = b^2 - 4ac
-  float a = dot(v, v);
-  float b = 2 * dot(v, (o - this->center));
-  float c = dot(o - this->center, o - this->center) - pow(this->radius, 2);
-
-  float delta = b*b - 4*a*c;
-  
-  if (hitPoint->x == -1.0)
-  {
-    //cout << a << " " << b << " " << c << " " << delta << endl;
-  }
-
-  // no intersection
-  if(delta < precision) {
-    return -1.0;
-  } 
-
-  float x1 = (-b + sqrt(delta)) / (2 * a);
-  float x2 = (-b - sqrt(delta)) / (2 * a);
-
-  float t = x1<x2 ? x1:x2;
-
-  if (t < 0.0)
-  {
-    if (hitPoint->x == -1.0) cout << t << endl;
-    return -1.0;
-  }
-
-  *hitPoint = o + t * v;
-
-  return t;
-  */
   // get near side by default
   return this->intersect_object(o, v, hitPoint, true);
 }
@@ -60,11 +26,6 @@ float sphere::intersect_object(Point o, vec3 v, Point* hitPoint, bool getNearSid
 
   float delta = b*b - 4*a*c;
   
-  if (hitPoint->x == -1.0)
-  {
-    //cout << a << " " << b << " " << c << " " << delta << endl;
-  }
-
   // no intersection
   if(delta < precision) {
     return -1.0;
@@ -93,9 +54,76 @@ float sphere::intersect_object(Point o, vec3 v, Point* hitPoint, bool getNearSid
       // get far side
       t = x1;
       *hitPoint = o + t * v;
+
+      if (hitPoint->x == -1)
+      {
+        cout << "now we got the far side" << endl;
+      }
     }
     return t;
   }
+}
+
+
+
+bool sphere::getRefractedRayOutObject(Point p, vec3 l, Point& outPoint, vec3& refractedRayOut) {
+  
+  bool Refracted;
+  vec3 rayIndisdeObj = refract(p, l, Refracted);
+  if (!Refracted)
+  {
+    return false;
+  }
+
+  // find intersection
+  Point hitPoint = vec3(-1, -1, -1);
+  // get far side of intersection
+  // in case this is a sphere
+  float dst = intersect_object(p, rayIndisdeObj, &hitPoint, false);
+  if (dst < precision)
+  {
+    return false;
+  }
+
+  refractedRayOut = refract(hitPoint, -rayIndisdeObj, Refracted);
+  if (!Refracted)
+  {
+    return false;
+  }
+
+  outPoint = hitPoint;
+
+  return true;
+}
+
+
+// do one single refraction
+// return fefracted array
+vec3 sphere::refract(Point p, vec3 l, bool& isRefracted) {
+  vec3 refractedRay;
+  vec3 n = getNormal(p);
+
+  float r_index;
+  if (dot(n, l) > 0) {
+    r_index = 1.0 / this->refractive_index;
+  } else {
+    // going out of the object
+    r_index = this->transmissivity;
+    n = -n;
+  }
+
+  float delta = 1 - pow(r_index, 2) * (1.0 - pow(dot(n, l), 2));
+
+  if (delta < 0.0)
+  {
+    isRefracted = false;
+  } else {
+    isRefracted = true;
+    refractedRay = n * (r_index * dot(n, l) - sqrt(delta)) - r_index * l;
+  }
+
+  //cout << "probably: " << isRefracted << endl;
+  return normalize(refractedRay);
 }
 
 
@@ -103,6 +131,7 @@ vec3 sphere::getNormal(Point point) {
   vec3 n = normalize(point - this->center);
   return n;
 }
+
 
 vec3 sphere::getCenter() {
   return this->center;
@@ -120,6 +149,3 @@ sphere::sphere(Point ctr, float rad, vec3 abm, vec3 dif,
 
 sphere::~sphere() {
 }
-
-
-

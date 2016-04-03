@@ -26,6 +26,9 @@ protected:
   float refractive_index;
   float transmissivity;
 
+  virtual float intersect_object(Point o, vec3 v, Point* hitPoint) = 0;
+  virtual vec3 refract(Point p, vec3 l, bool& isRefracted) = 0;
+
 public:
   object();
 	object(float, float);
@@ -44,12 +47,12 @@ public:
   virtual float getRefractiveIndex();
 
   virtual bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
-  virtual vec3 refract(Point p, vec3 l, bool& isRefracted);
-  virtual bool getRefractedRayOutObject(Point, vec3, Point&, vec3&);
+
   virtual float intersect_object(Point o, vec3 v, Point* hitPoint, bool getNearSide);
 
 	virtual vec3 getNormal(Point point) = 0;
-  virtual float intersect_object(Point o, vec3 v, Point* hitPoint) = 0;
+
+  virtual bool getRefractedRayOutObject(Point, vec3, Point&, vec3&) = 0;
 
   static object* intersect_scene(Point o, vec3 v, vector<object*> &objects, Point* hitPoint, object* ignore);
 

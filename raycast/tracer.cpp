@@ -165,10 +165,7 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
 
     if(obj->getRefractedRayOutObject(p, v, outPoint, refractedRay))
     {
-      vec3 reColor = obj->getTransmissivity()*recursive_ray_trace(outPoint, refractedRay, step+1, obj);
-      //cout << reColor << endl;
-      color += reColor;
-      //color += obj->getTransmissivity()*background_clr;
+      color += obj->getTransmissivity()*recursive_ray_trace(outPoint, refractedRay, step+1, obj);
       r_t++;
     } else {
       r_nt++;
