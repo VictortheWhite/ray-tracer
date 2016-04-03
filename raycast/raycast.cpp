@@ -93,6 +93,7 @@ bool reflection_on = false;
 bool stochastic_on = false;
 bool chessBoard_on = false;
 bool refraction_on = false;
+bool supersampling_on = false;
 
 
 // OpenGL
@@ -247,7 +248,8 @@ int main( int argc, char **argv )
 		if (strcmp(argv[i], "+l") == 0) reflection_on = true;
 		if (strcmp(argv[i], "+c") == 0) chessBoard_on = true;
 		if (strcmp(argv[i], "+r") == 0) refraction_on = true;
-		if (strcmp(argv[i], "+f") == 0) stochastic_on = true;		
+		if (strcmp(argv[i], "+f") == 0) stochastic_on = true;
+		if (strcmp(argv[i], "+p") == 0) supersampling_on = true;		
 	}
 
 	// setup scene
@@ -284,7 +286,8 @@ int main( int argc, char **argv )
 		);
 
 	// settings
-	rayTracer->set(shadow_on, reflection_on, stochastic_on, refraction_on);
+	rayTracer->set(shadow_on, reflection_on, stochastic_on, 
+		refraction_on, supersampling_on);
 
 	rayTracer->ray_trace(step_max);
 

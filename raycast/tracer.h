@@ -42,6 +42,7 @@ private:
 	bool reflection_on;
 	bool refraction_on;
 	bool stochastic_on;
+	bool supersampling_on;
 
 
 	Color recursive_ray_trace(Point o, vec3 ray, int step, object* ignore);
@@ -52,10 +53,7 @@ private:
 	float max(float, float);
 	float randFloat(float, float);
 
-	int pixel_in_shadow;
-	int pixel_not_in_shadow;
-
-	const int numOfStochasticRay = 5;
+	static const int numOfStochasticRay = 5;
 
 public:
 	tracer(
@@ -84,7 +82,7 @@ public:
 		int step_max
 		);
 
-	void set(bool, bool, bool, bool);
+	void set(bool, bool, bool, bool, bool);
 
 };
 

@@ -1,9 +1,5 @@
 #include "tracer.h"
 
-// debug
-static int r_t = 0;
-static int r_nt = 0;
-
 tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
                 Point Eye,    Color bgclr, Color nullclr,
@@ -28,9 +24,6 @@ tracer::tracer( vec3 **frame, int wWidth, int wHeight,
   this->decay_b = decayB;
   this->decay_c = decayC;
   this->scene = scene;
-
-  this->pixel_in_shadow = 0;
-  this->pixel_not_in_shadow = 0;
 }
 
 
@@ -65,18 +58,24 @@ void tracer::ray_trace(int step_max) {
   //cout << win_height << endl << win_width << endl;
 
   for (i = 0; i < win_height; i++) {
+    cout << "rendering: " << i << "(" << win_height << ")" << endl;
     for (j = 0; j < win_width; j++) {
-
       ray = normalize(cur_pixel_pos - eye_pos);
 
       // recursive ray trace
       ret_color = recursive_ray_trace(eye_pos, ray, 0, NULL);
 
-      // Parallel rays can be cast instead using below
-      //
-      // ray.x = ray.y = 0;
-      // ray.z = -1.0;
-      // ret_color = recursive_ray_trace(cur_pixel_pos, ray, 1);
+      if (supersampling_on)
+      {
+        float halfXGrid = x_grid_size / 2.0;
+        float halfYGrid = y_grid_size / 2.0;
+        ret_color += recursive_ray_trace(eye_pos, ray + vec3( halfXGrid,  halfYGrid, 0), 0, NULL);
+        ret_color += recursive_ray_trace(eye_pos, ray + vec3( halfXGrid, -halfYGrid, 0), 0, NULL);
+        ret_color += recursive_ray_trace(eye_pos, ray + vec3(-halfXGrid,  halfYGrid, 0), 0, NULL);
+        ret_color += recursive_ray_trace(eye_pos, ray + vec3(-halfXGrid, -halfYGrid, 0), 0, NULL);
+
+        ret_color /= 5.0;
+      }
 
       frame[i][j] = ret_color;
       cur_pixel_pos.x += x_grid_size;
@@ -86,11 +85,6 @@ void tracer::ray_trace(int step_max) {
     cur_pixel_pos.x = x_start;
   }
 
-  cout << "in shadow: " << pixel_in_shadow << endl;
-  cout << "not in shadow: " << pixel_not_in_shadow << endl;
-
-  cout << "r_t: " << r_t << endl
-    << "r_nt: " << r_nt << endl;
 }
 
 Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
@@ -107,11 +101,6 @@ Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
 
   color = phong(intersectionPoint, ray, obj, step);
 
-  if (step == 1)
-  {
-    //cout << "phong: " << color << endl;
-  }
-
   return color;
 }
 
@@ -124,21 +113,13 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
     if (obj->in_shadow(p, LightSource, scene))
     {
       shadow = 0.0;
-      pixel_in_shadow ++;
-    } else {
-      pixel_not_in_shadow ++;
-    }
+    } 
   }
 
   vec3 l = normalize(LightSource - p);      // pointing to light
   vec3 n = normalize(obj->getNormal(p));    // surface normal
   vec3 v = normalize(eye_pos - p);          // viewpoint
   vec3 r = 2.0 * dot(n, l) * n - l;         // reflection vector
-
-  if (obj->getIndex() <= 2)
-  {
-    //cout << n << endl;
-  }
 
   float dst = length(p - LightSource);
   float decay = 1.0 / (decay_a + decay_b*dst +decay_c*dst*dst);
@@ -168,10 +149,7 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
     if(obj->getRefractedRayOutObject(p, v, outPoint, refractedRay))
     {
       color += obj->getTransmissivity()*recursive_ray_trace(outPoint, refractedRay, step+1, obj);
-      r_t++;
-    } else {
-      r_nt++;
-    }
+    } 
   }
 
   // stochastic diffuse reflection
@@ -179,7 +157,7 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
   {
     for (int i = 0; i < numOfStochasticRay; ++i)
     {
-      vec3 ray = generateDiffuseRay(p, n);
+      vec3 ray = generateDiffuseRay(n);
       color += obj->getDiffuseCoefficient() * recursive_ray_trace(p, ray, step+1, obj);
     }
   }
@@ -199,11 +177,12 @@ vec3 tracer::generateDiffuseRay(vec3 n) {
 
 
 
-void tracer::set(bool shadow, bool refl, bool stoch, bool refra) {
+void tracer::set(bool shadow, bool refl, bool stoch, bool refra, bool super_samp) {
   this->shadow_on = shadow;
   this->reflection_on = refl;
   this->stochastic_on = stoch;
   this->refraction_on = refra;
+  this->supersampling_on = super_samp;
 }
 
 
