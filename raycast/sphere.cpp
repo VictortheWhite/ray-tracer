@@ -108,7 +108,7 @@ vec3 sphere::refract(Point p, vec3 l, bool& isRefracted) {
     r_index = 1.0 / this->refractive_index;
   } else {
     // going out of the object
-    r_index = this->transmissivity;
+    r_index = this->refractive_index;
     n = -n;
   }
 
