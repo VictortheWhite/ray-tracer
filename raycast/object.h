@@ -25,14 +25,15 @@ protected:
   float reflectance;
   float refractive_index;
   float transmissivity;
+  float diffuse_coefficient;
 
   virtual float intersect_object(Point o, vec3 v, Point* hitPoint) = 0;
   virtual vec3 refract(Point p, vec3 l, bool& isRefracted) = 0;
 
 public:
   object();
-	object(float, float);
-	object(vec3, vec3, vec3, float, float, float, float);
+	object(float, float, float);
+	object(vec3, vec3, vec3, float, float, float, float, float);
 
   int getIndex();
 
@@ -45,6 +46,7 @@ public:
   virtual float getReflectance(Point);
   virtual float getTransmissivity();
   virtual float getRefractiveIndex();
+  virtual float getDiffuseCoefficient();
 
   virtual bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
 

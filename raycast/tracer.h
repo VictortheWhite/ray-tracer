@@ -4,6 +4,7 @@
 #include "sphere.h"
 //#include <GL/glut.h>
 #include <math.h>
+#include <ctime>
 #include "global.h"
 #include "sphere.h"
 #include "object.h"
@@ -45,13 +46,16 @@ private:
 
 	Color recursive_ray_trace(Point o, vec3 ray, int step, object* ignore);
 	Color phong(Point p, vec3 v, object *obj, int step);
+	vec3  generateDiffuseRay(vec3 n);
 
 	// helper methods
 	float max(float, float);
-
+	float randFloat(float, float);
 
 	int pixel_in_shadow;
 	int pixel_not_in_shadow;
+
+	const int numOfStochasticRay = 5;
 
 public:
 	tracer(

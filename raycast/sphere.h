@@ -23,7 +23,8 @@ private:
 public:
   sphere();
   sphere(vec3 ctr, float rad, vec3 abm, vec3 dif,
-     vec3 spe, float shine, float refl, float refra, float trans);
+     vec3 spe, float shine, float refl, float refra, 
+     float trans, float dif_co);
   ~sphere();
 
   vec3 getCenter();

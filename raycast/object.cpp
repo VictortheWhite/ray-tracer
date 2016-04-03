@@ -3,14 +3,16 @@
 static int INDEX = 0;
 
 object::object() {}
-object::object(float refra, float trans) { 
+object::object(float refra, float trans, float dif_co) { 
   this->refractive_index = refra;
   this->transmissivity = trans; 
+  this->diffuse_coefficient = dif_co;
 
   this->index = INDEX++;
 }
 object::object(vec3 abm, vec3 dif, vec3 spe, 
-  float shine, float refl, float refra, float trans) 
+  float shine, float refl, float refra, 
+  float trans, float dif_co) 
 {
   this->ambient = abm;
   this->diffuse = dif;
@@ -19,6 +21,7 @@ object::object(vec3 abm, vec3 dif, vec3 spe,
   this->reflectance = refl;
   this->refractive_index = refra;
   this->transmissivity = trans;
+  this->diffuse_coefficient = dif_co;
 
   this->index = INDEX++;
 }
@@ -46,6 +49,10 @@ float object::getTransmissivity() {
 float object::getRefractiveIndex() {
   return this->refractive_index;
 }
+float object::getDiffuseCoefficient() {
+  return this->diffuse_coefficient;
+}
+
 
 
 int object::getIndex() {

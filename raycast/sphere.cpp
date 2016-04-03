@@ -140,8 +140,9 @@ vec3 sphere::getCenter() {
 sphere::sphere() {
 }
 sphere::sphere(Point ctr, float rad, vec3 abm, vec3 dif,
-     vec3 spe, float shine, float refl, float refra, float trans) 
-:object(abm, dif, spe, shine, refl, refra, trans)
+     vec3 spe, float shine, float refl, float refra, float trans, 
+     float dif_co) 
+:object(abm, dif, spe, shine, refl, refra, trans, dif_co)
 {
   this->center = ctr;
   this->radius = rad;  

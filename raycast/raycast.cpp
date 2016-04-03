@@ -247,7 +247,7 @@ int main( int argc, char **argv )
 		if (strcmp(argv[i], "+l") == 0) reflection_on = true;
 		if (strcmp(argv[i], "+c") == 0) chessBoard_on = true;
 		if (strcmp(argv[i], "+r") == 0) refraction_on = true;
-		
+		if (strcmp(argv[i], "+f") == 0) stochastic_on = true;		
 	}
 
 	// setup scene

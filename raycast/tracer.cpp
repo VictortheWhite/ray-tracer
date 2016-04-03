@@ -150,6 +150,7 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
 
   vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
 
+  // reflection
   if (reflection_on && step < step_max)
   {
      //recursively trace
@@ -157,7 +158,8 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
     color += obj->getReflectance(p)*recursive_ray_trace(p, reflectedRay, step+1, obj);
   }
 
-  if (refraction_on && step < step_max)
+  // refraction
+  if (refraction_on && step < max(step_max, 2))
   {
     // recursively trace refracted ray
     Point outPoint;
@@ -172,7 +174,27 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
     }
   }
 
+  // stochastic diffuse reflection
+  if (stochastic_on && step < max(step_max, 2))
+  {
+    for (int i = 0; i < numOfStochasticRay; ++i)
+    {
+      vec3 ray = generateDiffuseRay(p, n);
+      color += obj->getDiffuseCoefficient() * recursive_ray_trace(p, ray, step+1, obj);
+    }
+  }
+
   return color;
+}
+
+vec3 tracer::generateDiffuseRay(vec3 n) {
+  while (true) {
+    vec3 ray = vec3(randFloat(-1, 1), randFloat(-1, 1), randFloat(-1, 1));
+    if (dot(n, ray) >= 0)
+    {
+      return ray;
+    }
+  }
 }
 
 
@@ -187,4 +209,8 @@ void tracer::set(bool shadow, bool refl, bool stoch, bool refra) {
 
 float tracer::max(float a, float b) {
   return a > b? a : b;
+}
+
+float tracer::randFloat(float min, float max) {
+  return ((float)rand() / (float)RAND_MAX) * (max - min) + min;
 }
