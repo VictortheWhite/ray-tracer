@@ -108,7 +108,7 @@ vector<object*> set_up_default_scene(int n) {
   float sphere3_shineness = 30;
   float sphere3_reflectance = 0.3;
   float sphere3_refractive_index = 2.1;
-  float sphere3_transmissity = 0.15;
+  float sphere3_transmissity = 0.3;
   float sphere3_diffuse_coefficient = 0.1;
 
   object *obj3 = new sphere(

@@ -170,7 +170,7 @@ vec3 tracer::generateDiffuseRay(vec3 n) {
     vec3 ray = vec3(randFloat(-1, 1), randFloat(-1, 1), randFloat(-1, 1));
     if (dot(n, ray) >= 0)
     {
-      return ray;
+      return normalize(ray);
     }
   }
 }
