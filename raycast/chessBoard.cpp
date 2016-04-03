@@ -1,11 +1,10 @@
 #include "chessBoard.h"
 
-chessBoard::chessBoard() {
+chessBoard::chessBoard() : object(1.55, 0)
+{
 	this->normal = vec3(0, 1, 0);
 	this->pOrigin = vec3(0.0, -2.5, -3.5);
 	this->width = 8;
-
-	cout << "chessBoard" <<index << endl;
 }
 chessBoard::~chessBoard() {}
 
@@ -14,9 +13,9 @@ vec3 chessBoard::getAmbient(Point p) {
 	int y = (int)(p-pOrigin-width).z;
 
 	if ( (x+y)%2 == 0) {
-		return vec3(0.6, 0.6, 0.6);
+		return vec3(0.5, 0.5, 0.5);
 	} else {
-		return vec3(0.2,0.2,0.2);
+		return vec3(0.1,0.1,0.1);
 	}
 }
 
@@ -26,7 +25,7 @@ vec3 chessBoard::getDiffuse(Point p) {
 	int y = (int)(p-pOrigin-width).z;
 
 	if ( (x+y)%2 == 0) {
-		return vec3(0.8, 0.8, 0.8);
+		return vec3(1.0, 1.0, 1.0);
 	} else {
 		return vec3(0.2,0.2,0.2);
 	}
@@ -41,16 +40,12 @@ float chessBoard::getShineness(Point p) {
 }
 
 float chessBoard::getReflectance(Point p) {
-	return 0.7;
+	return 0.3;
 }
 
 
 vec3 chessBoard::getNormal(Point p) {
 	return this->normal;
-}
-
-bool chessBoard::in_shadow(Point p, Point LightSource, vector<object*> &objects) {
-	return false;
 }
 
 float chessBoard::intersect_object(Point o, vec3 v, Point* hitPoint) {
@@ -63,7 +58,7 @@ float chessBoard::intersect_object(Point o, vec3 v, Point* hitPoint) {
 
  	float t = dot(pOrigin-o, normal) / dot(v, normal);
 
- 	if (t < 0)
+ 	if (t < precision)
 	{
   	  return -1.0;
  	}
@@ -79,8 +74,6 @@ float chessBoard::intersect_object(Point o, vec3 v, Point* hitPoint) {
   	{
   		return -1.0;
   	}
-
-  	//cout << t << endl;
 
 	return t;
 }

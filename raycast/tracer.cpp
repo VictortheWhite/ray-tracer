@@ -1,5 +1,8 @@
 #include "tracer.h"
 
+// debug
+static int r_t = 0;
+static int r_nt = 0;
 
 tracer::tracer( vec3 **frame, int wWidth, int wHeight,
                 float iWidth, float iHeight, float image,
@@ -85,6 +88,9 @@ void tracer::ray_trace(int step_max) {
 
   cout << "in shadow: " << pixel_in_shadow << endl;
   cout << "not in shadow: " << pixel_not_in_shadow << endl;
+
+  cout << "r_t: " << r_t << endl
+    << "r_nt: " << r_nt << endl;
 }
 
 Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
@@ -100,6 +106,11 @@ Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
   } 
 
   color = phong(intersectionPoint, ray, obj, step);
+
+  if (step == 1)
+  {
+    //cout << "phong: " << color << endl;
+  }
 
   return color;
 }
@@ -136,21 +147,32 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
   vec3 diffuseReflection = decay * LightIntensity *  obj->getDiffuse(p) * max(dot(n, l), 0) ;
   vec3 specularReflection = decay * LightIntensity * obj->getSpecular(p) * pow(max(dot(r, v),0), obj->getShineness(p));
 
-  /*
-  if (obj->getIndex() <= 2 && diffuseReflection+specularReflection == vec3(0, 0, 0));
-  {
-    cout << "what the fuck" << endl
-      << p << endl
-      << n << endl;
-  }
-  */
 
   vec3 color = ambientReflection + shadow * (diffuseReflection + specularReflection);
+
   if (reflection_on && step < step_max)
   {
      //recursively trace
     vec3 reflectedRay = 2.0*dot(v, n)*n - v;
-    color = color + obj->getReflectance(p)*recursive_ray_trace(p, reflectedRay, step+1, obj);
+    color += obj->getReflectance(p)*recursive_ray_trace(p, reflectedRay, step+1, obj);
+  }
+
+  if (refraction_on && step < step_max)
+  {
+    // recursively trace refracted ray
+    Point outPoint;
+    vec3 refractedRay;
+
+    if(obj->getRefractedRayOutObject(p, v, outPoint, refractedRay))
+    {
+      vec3 reColor = obj->getTransmissivity()*recursive_ray_trace(outPoint, refractedRay, step+1, obj);
+      //cout << reColor << endl;
+      color += reColor;
+      //color += obj->getTransmissivity()*background_clr;
+      r_t++;
+    } else {
+      r_nt++;
+    }
   }
 
   return color;
@@ -158,10 +180,11 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
 
 
 
-void tracer::set(bool shadow, bool refl, bool stoch) {
+void tracer::set(bool shadow, bool refl, bool stoch, bool refra) {
   this->shadow_on = shadow;
   this->reflection_on = refl;
   this->stochastic_on = stoch;
+  this->refraction_on = refra;
 }
 
 

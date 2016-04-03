@@ -55,6 +55,10 @@ vector<object*> set_up_default_scene(int n) {
   vec3 sphere1_specular = vec3(1.0, 1.0, 1.0);
   float sphere1_shineness = 10;
   float sphere1_reflectance = 0.4;
+  float sphere1_refractive_index = 1.55;
+  float sphere1_transmissity = 0.2;
+
+
   object *obj1 = new sphere(
     sphere1_ctr, 
     sphere1_rad, 
@@ -62,7 +66,9 @@ vector<object*> set_up_default_scene(int n) {
     sphere1_diffuse, 
     sphere1_specular, 
     sphere1_shineness,
-		sphere1_reflectance);
+		sphere1_reflectance,
+    sphere1_refractive_index,
+    sphere1_transmissity);
   scene.push_back(obj1);
 
 
@@ -74,6 +80,8 @@ vector<object*> set_up_default_scene(int n) {
   vec3 sphere2_specular = vec3(1.0, 1.0, 1.0);
   float sphere2_shineness = 6;
   float sphere2_reflectance = 0.3;
+  float sphere2_refractive_index = 1.67;
+  float sphere2_transmissity = 0.3;
   object *obj2 = new sphere(
     sphere2_ctr, 
     sphere2_rad, 
@@ -81,7 +89,9 @@ vector<object*> set_up_default_scene(int n) {
     sphere2_diffuse, 
     sphere2_specular, 
     sphere2_shineness,
-		sphere2_reflectance);
+		sphere2_reflectance,
+    sphere2_refractive_index,
+    sphere2_transmissity);
   scene.push_back(obj2);
 
   // sphere 3
@@ -92,6 +102,9 @@ vector<object*> set_up_default_scene(int n) {
   vec3 sphere3_specular = vec3(0.0, 1.0, 0.0);
   float sphere3_shineness = 30;
   float sphere3_reflectance = 0.3;
+  float sphere3_refractive_index = 2.1;
+  float sphere3_transmissity = 0.15;
+
   object *obj3 = new sphere(
     sphere3_ctr, 
     sphere3_rad, 
@@ -99,7 +112,9 @@ vector<object*> set_up_default_scene(int n) {
     sphere3_diffuse, 
     sphere3_specular, 
     sphere3_shineness,
-		sphere3_reflectance);
+		sphere3_reflectance,
+    sphere3_refractive_index,
+    sphere3_transmissity);
   scene.push_back(obj3);
 
 

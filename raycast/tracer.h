@@ -39,6 +39,7 @@ private:
 
 	bool shadow_on;
 	bool reflection_on;
+	bool refraction_on;
 	bool stochastic_on;
 
 
@@ -79,7 +80,7 @@ public:
 		int step_max
 		);
 
-	void set(bool, bool, bool);
+	void set(bool, bool, bool, bool);
 
 };
 

@@ -23,10 +23,13 @@ protected:
   vec3 specular;
   float shineness;
   float reflectance;
+  float refractive_index;
+  float transmissivity;
 
 public:
-	object();
-	object(vec3, vec3, vec3, float, float);
+  object();
+	object(float, float);
+	object(vec3, vec3, vec3, float, float, float, float);
 
   int getIndex();
 
@@ -37,20 +40,24 @@ public:
   virtual vec3 getSpecular(Point);
   virtual float getShineness(Point);
   virtual float getReflectance(Point);
+  virtual float getTransmissivity();
+  virtual float getRefractiveIndex();
 
   virtual bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
+  virtual vec3 refract(Point p, vec3 l, bool& isRefracted);
+  virtual bool getRefractedRayOutObject(Point, vec3, Point&, vec3&);
+  virtual float intersect_object(Point o, vec3 v, Point* hitPoint, bool getNearSide);
 
 	virtual vec3 getNormal(Point point) = 0;
   virtual float intersect_object(Point o, vec3 v, Point* hitPoint) = 0;
 
   static object* intersect_scene(Point o, vec3 v, vector<object*> &objects, Point* hitPoint, object* ignore);
 
-  //virtual bool in_shadow(Point p, Point lightSource, vector<object*> &objects) = 0;
-
-
 };
 
-
+// this precision is used to judge intesection
+// in case the intersection point returned is p itself
+const int precision = 0.000001;
 
 
 
