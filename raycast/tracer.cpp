@@ -67,8 +67,8 @@ void tracer::ray_trace(int step_max) {
 
       if (supersampling_on)
       {
-        float halfXGrid = x_grid_size / 2.0;
-        float halfYGrid = y_grid_size / 2.0;
+        float halfXGrid = x_grid_size / 4.0;
+        float halfYGrid = y_grid_size / 4.0;
         ret_color += recursive_ray_trace(eye_pos, ray + vec3( halfXGrid,  halfYGrid, 0), 0, NULL);
         ret_color += recursive_ray_trace(eye_pos, ray + vec3( halfXGrid, -halfYGrid, 0), 0, NULL);
         ret_color += recursive_ray_trace(eye_pos, ray + vec3(-halfXGrid,  halfYGrid, 0), 0, NULL);
