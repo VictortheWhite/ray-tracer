@@ -158,7 +158,7 @@ Color tracer::phong(Point p, vec3 ray, object *obj, int step) {
     for (int i = 0; i < numOfStochasticRay; ++i)
     {
       vec3 ray = generateDiffuseRay(n);
-      color += obj->getDiffuseCoefficient() * recursive_ray_trace(p, ray, step+1, obj);
+      color += 0.1* obj->getDiffuse(p)* recursive_ray_trace(p, ray, step+1, obj);
     }
   }
 
