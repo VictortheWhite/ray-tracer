@@ -22,9 +22,9 @@ extern float decay_c;
 extern bool chessBoard_on;
 
 
-void addChessBoard(vector<object*> &scene);
-void readPolygonsFromFile(char* filename, vector<object*>& scene);
-
+void addChessBoard(vector<object*> &scene, int width);
+void readPolygonsFromFile(char* filename, vector<object*>& scene, vec3 shift);
+void eatLine(FILE*);
 //////////////////////////////////////////////////////////////////////////
 
 /*******************************************
@@ -132,7 +132,7 @@ vector<object*> set_up_default_scene(int n) {
 
   if (chessBoard_on)
   {
-    addChessBoard(scene);
+    addChessBoard(scene, 8);
     cout << "size " << scene.size() << endl;
   }
 
@@ -167,19 +167,25 @@ vector<object*> set_up_user_scene(int n) {
 
   // add triangles of meshes
   char *filename = "chess_pieces/chess_piece.smf";
-  readPolygonsFromFile(filename, scene);
+  vec3 shift1 =  vec3(0.0, -0.75, -1.25);
+  readPolygonsFromFile(filename, scene, shift1);
+
+  // mesh 2
+  char *filename2 = "chess_pieces/bishop.smf";
+  vec3 shift2 =  vec3(0.0, -0.5, -1.5);
+  //readPolygonsFromFile(filename2, scene, shift2);
 
   // add chess board
   if (chessBoard_on)
   {
-    addChessBoard(scene);
+    addChessBoard(scene, 800);
   }
 
   return scene;
 
 }
 
-void readPolygonsFromFile(char* filename, vector<object*>& scene) {
+void readPolygonsFromFile(char* filename, vector<object*>& scene, vec3 shift) {
   FILE *fp = fopen(filename, "r");
 
   if (fp == NULL)
@@ -194,10 +200,14 @@ void readPolygonsFromFile(char* filename, vector<object*>& scene) {
   int a, b, c;
   char ch;
   while(fscanf(fp, "%c", &ch) != EOF) {
+    if (ch == '#')
+    {
+      eatLine(fp);
+    }
     if (ch == 'v')
     {
       fscanf(fp, " %f %f %f\n", &x, &y, &z);
-      vetices.push_back(vec3(x, y, z));
+      vetices.push_back(vec3(x, y, z)+shift);
     }
     if (ch == 'f')
     {
@@ -224,7 +234,18 @@ void readPolygonsFromFile(char* filename, vector<object*>& scene) {
 }
 
 
-void addChessBoard(vector<object*> &scene) {
-  object *board = new chessBoard();
+void addChessBoard(vector<object*> &scene, int width) {
+  object *board = new chessBoard(width);
   scene.push_back(board);
+}
+
+void eatLine(FILE *fp) {
+  char buf;
+  while(true) {
+    fscanf(fp, "%c", &buf);
+    if (buf == '\n')
+    {
+      break;
+    }
+  }
 }

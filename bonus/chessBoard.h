@@ -16,7 +16,7 @@ private:
 
 
 public:
-	chessBoard();
+	chessBoard(int width);
 	~chessBoard();
 
 	vec3 getAmbient(Point);

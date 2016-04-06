@@ -58,7 +58,7 @@ void tracer::ray_trace(int step_max) {
   //cout << win_height << endl << win_width << endl;
 
   for (i = 0; i < win_height; i++) {
-    //cout << "rendering: " << i << "(" << win_height << ")" << endl;
+    cout << "rendering: " << i << "(" << win_height << ")" << endl;
     for (j = 0; j < win_width; j++) {
       ray = normalize(cur_pixel_pos - eye_pos);
 

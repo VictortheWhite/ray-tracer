@@ -13,9 +13,12 @@ private:
 	vec3  normal;
 
 	float intersect_object(Point o, vec3 v, Point* hitPoint);
+	float intersect_object(Point o, vec3 v, Point*, bool FromBack);
 	vec3 refract(Point p, vec3 l, bool& isRefracted);
 
 	bool IsPointInTriangle(Point p);
+
+	object* intersectTriangleInMesh(Point origin, vec3 v, vector<object*>& objects, Point *hitPoint, object* ignore);
 
 public:
 	triangle();

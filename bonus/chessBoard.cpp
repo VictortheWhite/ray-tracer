@@ -1,10 +1,10 @@
 #include "chessBoard.h"
 
-chessBoard::chessBoard() : object(1.55, 0, 0.1)
+chessBoard::chessBoard(int width) : object(1.55, 0, 0.1)
 {
 	this->normal = vec3(0, 1, 0);
 	this->pOrigin = vec3(0.0, -2.5, -3.5);
-	this->width = 8;
+	this->width = width;
 }
 chessBoard::~chessBoard() {}
 
