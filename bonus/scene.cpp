@@ -3,7 +3,11 @@
 //
 #include "sphere.h"
 #include "chessBoard.h"
+#include "triangle.h"
 #include <stdio.h>
+#include "errno.h"
+
+using namespace std;
 
 extern Point light1;
 extern vec3 light1_intensity;
@@ -19,6 +23,7 @@ extern bool chessBoard_on;
 
 
 void addChessBoard(vector<object*> &scene);
+void readPolygonsFromFile(char* filename, vector<object*>& scene);
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -138,8 +143,91 @@ vector<object*> set_up_default_scene(int n) {
  * You can create your own scene here
  ***************************************/
 vector<object*> set_up_user_scene(int n) {
+
+  // set background color
+  background_clr.x = 0.5;   // r
+  background_clr.y = 0.05;  // g
+  background_clr.z = 0.8;   // b
+
+  // set up global ambient term
+  global_ambient = vec3(0.2, 0.2, 0.2);
+
+  // set up light 1
+  light1 = vec3(-2.0, 5.0, 1.0);
+  light1_intensity = vec3(1.0, 1.0, 1.0);
+
+  // set up decay parameters
+  decay_a = 0.5;
+  decay_b = 0.3;
+  decay_c = 0.0;
+
+
+  // set up meshes
+  vector<object*> scene;
+
+  // add triangles of meshes
+  char *filename = "chess_pieces/chess_piece.smf";
+  readPolygonsFromFile(filename, scene);
+
+  // add chess board
+  if (chessBoard_on)
+  {
+    addChessBoard(scene);
+  }
+
+  return scene;
+
 }
 
+void readPolygonsFromFile(char* filename, vector<object*>& scene) {
+  FILE *fp = fopen(filename, "r");
+
+  if (fp == NULL)
+  {
+    perror("fopen");
+    exit(EXIT_FAILURE);
+  }
+
+  vector<vec3> vetices;
+
+  float x, y, z;
+  int a, b, c;
+  char ch;
+  while(fscanf(fp, "%c", &ch) != EOF) {
+    if (ch == 'v')
+    {
+      fscanf(fp, " %f %f %f\n", &x, &y, &z);
+      vetices.push_back(vec3(x, y, z));
+    }
+    if (ch == 'f')
+    {
+      fscanf(fp, " %d %d %d\n", &a, &b, &c);
+      vec3 vet[3] = { vetices[a-1], vetices[b-1], vetices[c-1]};
+      vec3 ambient = vec3(0.3, 0.4, 0.8);
+      vec3 diffuse = vec3(0.1, 0.5, 0.3);
+      vec3 specular = vec3(1.0, 1.0, 1.0);
+      float shine = 30.0;
+      float reflectance = 0.6;
+      float refractive_index = 1.55;
+      float transmissity = 0.4;
+      float diffuse_index = 0.1;
+
+      triangle *tri = new triangle(vet, ambient, diffuse, specular, 
+        shine, reflectance, refractive_index, transmissity, diffuse_index);
+
+      scene.push_back(tri);
+      /*
+      for (int i = 0; i < 3; ++i)
+      {
+        cout << vet[i] << endl;
+      }
+      cout << endl << endl;
+      */
+    }
+
+  }
+
+}
 
 
 void addChessBoard(vector<object*> &scene) {

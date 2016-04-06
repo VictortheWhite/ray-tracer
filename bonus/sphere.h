@@ -31,7 +31,6 @@ public:
   vec3 getNormal(Point point);
   bool getRefractedRayOutObject(Point p, vec3 l, Point& outPoint, vec3& refractedRayOut);
 
-  //bool in_shadow(Point p, Point lightSource, vector<object*> &objects);
 };
 
 
