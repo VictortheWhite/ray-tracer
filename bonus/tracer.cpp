@@ -99,9 +99,7 @@ Color tracer::recursive_ray_trace(Point o, vec3 ray, int step, object* ignore) {
     return background_clr;
   } 
 
-  //color = phong(intersectionPoint, ray, obj, step);
-
-  color = vec3(1, 1, 1);
+  color = phong(intersectionPoint, ray, obj, step);
 
   return color;
 }

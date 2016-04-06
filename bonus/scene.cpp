@@ -203,8 +203,8 @@ void readPolygonsFromFile(char* filename, vector<object*>& scene) {
     {
       fscanf(fp, " %d %d %d\n", &a, &b, &c);
       vec3 vet[3] = { vetices[a-1], vetices[b-1], vetices[c-1]};
-      vec3 ambient = vec3(0.3, 0.4, 0.8);
-      vec3 diffuse = vec3(0.1, 0.5, 0.3);
+      vec3 ambient = vec3(0.7, 0.7, 0.7);
+      vec3 diffuse = vec3(0.1, 0.5, 0.8);
       vec3 specular = vec3(1.0, 1.0, 1.0);
       float shine = 30.0;
       float reflectance = 0.6;
@@ -216,13 +216,7 @@ void readPolygonsFromFile(char* filename, vector<object*>& scene) {
         shine, reflectance, refractive_index, transmissity, diffuse_index);
 
       scene.push_back(tri);
-      /*
-      for (int i = 0; i < 3; ++i)
-      {
-        cout << vet[i] << endl;
-      }
-      cout << endl << endl;
-      */
+      
     }
 
   }
