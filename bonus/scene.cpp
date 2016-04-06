@@ -171,8 +171,7 @@ vector<object*> set_up_user_scene(int n) {
   readPolygonsFromFile(filename, scene, shift1);
 
   // mesh 2
-  char *filename2 = "chess_pieces/bishop.smf";
-  vec3 shift2 =  vec3(0.0, -0.5, -1.5);
+  //vec3 shift2 =  vec3(0.0, -1, -1.5);
   //readPolygonsFromFile(filename2, scene, shift2);
 
   // add chess board
@@ -226,10 +225,34 @@ void readPolygonsFromFile(char* filename, vector<object*>& scene, vec3 shift) {
         shine, reflectance, refractive_index, transmissity, diffuse_index);
 
       scene.push_back(tri);
-      
+
+      // get another chess piece
+      // though not elegant to put it here.
+      // I am running out of time....
+
+      for (int i = 0; i < 3; ++i)
+      {
+        vet[i] += vec3(-0.6, -0.2, -0.2);
+      }
+
+      vec3 ambient2 = vec3(0.3, 0.3, 0.3);
+      vec3 diffuse2 = vec3(0.1, 0.0, 0.55);
+      vec3 specular2 = vec3(1.0, 1.0, 1.0);
+      float shine2 = 35.0;
+      float reflectance2 = 0.8;
+      float refractive_index2 = 2.55;
+      float transmissity2 = 0.6;
+      float diffuse_index2 = 0.05;
+
+      triangle *tri2 = new triangle(vet, ambient2, diffuse2, specular2, 
+        shine2, reflectance2, refractive_index2, transmissity2, diffuse_index2);
+
+      scene.push_back(tri2);
     }
 
   }
+
+  fclose(fp);
 
 }
 
